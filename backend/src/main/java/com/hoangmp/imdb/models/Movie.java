@@ -5,24 +5,26 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
-public class User {
+public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = true)
-    private String password;
-    private LocalDate createAt = LocalDate.now();
+    @Column(nullable = false, length = 150)
     private String name;
 
-    @Column(nullable = false, unique = true)
-    private String email;
-    private String phoneNumber;
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column(length = 500)
+    private String imageUrl;
+
+    @Column(length = 500)
+    private String trailerUrl;
+
+    private Boolean tvSeries;
 }

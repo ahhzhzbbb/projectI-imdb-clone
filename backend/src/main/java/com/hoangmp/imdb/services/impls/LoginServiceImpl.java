@@ -28,7 +28,7 @@ public class LoginServiceImpl implements LoginService {
             return ResponseEntity.status(401).body(new LoginResponse(false, "Sai mat khau", null));
         }
 
-        UserDTO userDTO = new UserDTO(user.getUserId(), user.getName(), user.getEmail());
+        UserDTO userDTO = new UserDTO(user.getId(), user.getName(), user.getEmail());
         return ResponseEntity.ok(new LoginResponse(true, "Dang nhap thanh cong!", userDTO));
     }
 }
