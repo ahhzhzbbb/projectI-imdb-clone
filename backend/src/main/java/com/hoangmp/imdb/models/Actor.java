@@ -1,9 +1,12 @@
 package com.hoangmp.imdb.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -22,4 +25,7 @@ public class Actor {
 
     @Column(length = 500)
     private String imageUrl;
+
+    @OneToMany(mappedBy = "actor")
+    private List<MovieActor> movieActors;
 }

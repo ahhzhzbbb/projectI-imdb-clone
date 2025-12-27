@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MovieDTO {
+    private Long id;
     private String name;
     private String description;
     private String imageUrl;

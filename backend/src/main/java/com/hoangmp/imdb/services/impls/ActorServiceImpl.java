@@ -1,0 +1,61 @@
+package com.hoangmp.imdb.services.impls;
+
+import com.hoangmp.imdb.exceptions.ResourceNotFoundException;
+import com.hoangmp.imdb.models.Actor;
+import com.hoangmp.imdb.payload.dto.ActorDTO;
+import com.hoangmp.imdb.payload.request.ActorRequest;
+import com.hoangmp.imdb.payload.response.ActorResponse;
+import com.hoangmp.imdb.repositories.ActorRepository;
+import com.hoangmp.imdb.services.ActorService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ActorServiceImpl implements ActorService {
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private ActorRepository actorRepository;
+
+    @Override
+    public ActorDTO createActor(ActorRequest actorRequest ) {
+        Actor newActor = modelMapper.map(actorRequest, Actor.class);
+        actorRepository.save(newActor);
+        return modelMapper.map(newActor, ActorDTO.class);
+    }
+
+    @Override
+    public ActorDTO deleteActor(Long actorId) {
+        Actor actor = actorRepository.findById(actorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Actor", "id", actorId));
+
+        actorRepository.delete(actor);
+        return modelMapper.map(actor, ActorDTO.class);
+    }
+
+    @Override
+    public ActorResponse getAllActors() {
+        List<Actor> actorList = actorRepository.findAll();
+        List<ActorDTO> actorDTOList = actorList.stream()
+                .map(actor -> modelMapper.map(actor, ActorDTO.class))
+                .toList();
+
+        ActorResponse response = new ActorResponse();
+        response.setActorDTOList(actorDTOList);
+        return response;
+    }
+
+    @Override
+    public ActorDTO updateActor(Long actorId, ActorRequest actorRequest) {
+        Actor actor = actorRepository.findById(actorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Actor", "id", actorId));
+        modelMapper.map(actorRequest, actor);
+        Actor updatedActor = actorRepository.save(actor);
+        return modelMapper.map(updatedActor, ActorDTO.class);
+    }
+}
