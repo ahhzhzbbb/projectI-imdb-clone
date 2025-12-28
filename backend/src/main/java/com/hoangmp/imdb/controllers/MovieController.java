@@ -1,6 +1,7 @@
 package com.hoangmp.imdb.controllers;
 
 import com.hoangmp.imdb.payload.dto.MovieDTO;
+import com.hoangmp.imdb.payload.dto.MovieDetailDTO;
 import com.hoangmp.imdb.payload.request.MovieRequest;
 import com.hoangmp.imdb.payload.response.MovieResponse;
 import com.hoangmp.imdb.services.MovieService;
@@ -14,10 +15,10 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
-    @PostMapping("/movies")
+    @PostMapping("/movie")
     public ResponseEntity<MovieDTO> createMovie(@RequestBody MovieRequest movieRequest) {
-        MovieDTO addedMovieDTO = movieService.createMovie(movieRequest);
-        return ResponseEntity.ok().body(addedMovieDTO);
+        MovieDTO response = movieService.createMovie(movieRequest);
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/movies")
@@ -26,9 +27,15 @@ public class MovieController {
         return ResponseEntity.ok().body(response);
     }
 
-    @DeleteMapping("/movies/{movieId}")
+    @DeleteMapping("/movie/{movieId}")
     public ResponseEntity<MovieDTO> deleteMovie(@PathVariable Long movieId) {
-        MovieDTO movieDTO = movieService.deleteMovie(movieId);
-        return ResponseEntity.ok().body(movieDTO);
+        MovieDTO response = movieService.deleteMovie(movieId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/movie/{movieId}")
+    public ResponseEntity<MovieDetailDTO> getMovieDetail(@PathVariable Long movieId) {
+        MovieDetailDTO response = movieService.getMovieDetail(movieId);
+        return ResponseEntity.ok().body(response);
     }
 }

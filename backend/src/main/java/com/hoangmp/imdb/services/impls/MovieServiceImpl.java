@@ -2,7 +2,9 @@ package com.hoangmp.imdb.services.impls;
 
 import com.hoangmp.imdb.exceptions.ResourceNotFoundException;
 import com.hoangmp.imdb.models.Movie;
+import com.hoangmp.imdb.models.Season;
 import com.hoangmp.imdb.payload.dto.MovieDTO;
+import com.hoangmp.imdb.payload.dto.MovieDetailDTO;
 import com.hoangmp.imdb.payload.request.MovieRequest;
 import com.hoangmp.imdb.payload.response.MovieResponse;
 import com.hoangmp.imdb.repositories.MovieRepository;
@@ -23,7 +25,14 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieDTO createMovie(MovieRequest movieRequest) {
-        Movie newMovie = modelMapper.map(movieRequest, Movie.class);
+//        Movie newMovie = modelMapper.map(movieRequest, Movie.class);
+        Movie newMovie = new Movie();
+        modelMapper.map(movieRequest, newMovie);
+
+        Season season1 = new Season(1);
+        season1.setMovie(newMovie);
+        newMovie.getSeasons().add(season1);
+
         movieRepository.save(newMovie);
         MovieDTO response = modelMapper.map(newMovie, MovieDTO.class);
         return response;
@@ -33,11 +42,21 @@ public class MovieServiceImpl implements MovieService {
     public MovieResponse getAllMovies() {
         List<Movie> movies = movieRepository.findAll();
         List<MovieDTO> movieList = movies.stream()
-                .map(movie -> modelMapper.map(movie, MovieDTO.class))
+                .map(movie -> new MovieDTO(movie.getId(), movie.getName(), movie.getDescription(), movie.getImageUrl(), movie.getTvSeries()))
                 .toList();
         MovieResponse movieResponse = new MovieResponse();
         movieResponse.setMovies(movieList);
         return movieResponse;
+    }
+
+    @Override
+    public MovieDetailDTO getMovieDetail(Long movieId) {
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Movie", "id", movieId)
+                );
+        MovieDetailDTO movieDetailDTO = modelMapper.map(movie, MovieDetailDTO.class);
+        return movieDetailDTO;
     }
 
     @Override

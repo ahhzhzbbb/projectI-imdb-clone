@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -19,4 +21,11 @@ public class Season {
     @ManyToOne
     @JoinColumn(name = "movie_id")
     private Movie movie;
+
+    @OneToMany(mappedBy = "season")
+    private List<Episode> episodes;
+
+    public Season (Integer number) {
+        this.number = number;
+    }
 }

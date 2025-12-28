@@ -5,12 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,13 +31,18 @@ public class Movie {
 
     private Boolean tvSeries;
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Season> seasons;
+    @OneToMany(
+            mappedBy = "movie",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OrderBy("number ASC")
+    private List<Season> seasons = new ArrayList<>();
+
 
     @OneToOne
     private Director director;
 
     @OneToMany(mappedBy = "movie")
     private List<MovieActor> movieActors;
-
 }
