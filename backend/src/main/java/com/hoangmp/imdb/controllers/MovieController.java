@@ -33,7 +33,7 @@ public class MovieController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/movie/{movieId}")
+    @GetMapping("/movie/{movieId}/seasons")
     public ResponseEntity<MovieDetailDTO> getMovieDetail(@PathVariable Long movieId) {
         MovieDetailDTO response = movieService.getMovieDetail(movieId);
         return ResponseEntity.ok().body(response);

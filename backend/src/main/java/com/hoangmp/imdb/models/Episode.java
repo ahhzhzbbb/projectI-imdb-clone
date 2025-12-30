@@ -21,6 +21,16 @@ public class Episode {
     @Column(length = 200)
     private String title;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String summary;
+
+    @Column(length = 500)
+    private String posterURL;
+
+    @Column(length = 500)
+    private String trailerURL;
+
     @ManyToOne
     @JoinColumn(name = "season_id", nullable = false)
     private Season season;

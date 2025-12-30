@@ -1,10 +1,13 @@
 package com.hoangmp.imdb.payload.dto;
 
+import com.hoangmp.imdb.models.MovieGenre;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -15,4 +18,5 @@ public class MovieDTO {
     private String description;
     private String imageUrl;
     private Boolean tvSeries;
+    private Set<MovieGenre> movieGenres;
 }

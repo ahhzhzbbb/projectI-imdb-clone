@@ -1,6 +1,7 @@
 package com.hoangmp.imdb.controllers;
 
 import com.hoangmp.imdb.payload.dto.SeasonDTO;
+import com.hoangmp.imdb.payload.dto.SeasonDetailDTO;
 import com.hoangmp.imdb.services.SeasonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,4 +24,11 @@ public class SeasonController {
         SeasonDTO response = seasonService.deleteSeason(id);
         return ResponseEntity.ok().body(response);
     }
+
+    @GetMapping("/season/{id}/episodes")
+    public ResponseEntity<SeasonDetailDTO> getSeasonDetail(@PathVariable Long id) {
+        SeasonDetailDTO response = seasonService.getSeasonDetail(id);
+        return ResponseEntity.ok().body(response);
+    }
+
 }

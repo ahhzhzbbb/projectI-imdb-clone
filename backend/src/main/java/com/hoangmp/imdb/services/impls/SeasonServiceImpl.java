@@ -4,8 +4,7 @@ import com.hoangmp.imdb.exceptions.ResourceNotFoundException;
 import com.hoangmp.imdb.models.Movie;
 import com.hoangmp.imdb.models.Season;
 import com.hoangmp.imdb.payload.dto.SeasonDTO;
-import com.hoangmp.imdb.payload.request.SeasonRequest;
-import com.hoangmp.imdb.payload.response.SeasonResponse;
+import com.hoangmp.imdb.payload.dto.SeasonDetailDTO;
 import com.hoangmp.imdb.repositories.MovieRepository;
 import com.hoangmp.imdb.repositories.SeasonRepository;
 import com.hoangmp.imdb.services.SeasonService;
@@ -56,5 +55,15 @@ public class SeasonServiceImpl implements SeasonService {
 
         movie.getSeasons().remove(lastSeason);
         return modelMapper.map(lastSeason, SeasonDTO.class);
+    }
+
+    @Override
+    public SeasonDetailDTO getSeasonDetail(Long seasonId) {
+        Season season = seasonRepository.findById(seasonId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Season", "id", seasonId)
+                );
+        SeasonDetailDTO seasonDetailDTO = modelMapper.map(season, SeasonDetailDTO.class);
+        return seasonDetailDTO;
     }
 }
