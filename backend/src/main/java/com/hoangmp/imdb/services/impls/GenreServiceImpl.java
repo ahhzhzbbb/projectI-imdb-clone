@@ -49,7 +49,7 @@ public class GenreServiceImpl implements GenreService {
                 .map(genre -> modelMapper.map(genre, GenreDTO.class))
                 .toList();
         GenreResponse genreResponse = new GenreResponse();
-        genreResponse.setGenreDTOList(genreDTOList);
+        genreResponse.setGenres(genreDTOList);
         return genreResponse;
     }
 }

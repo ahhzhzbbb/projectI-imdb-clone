@@ -42,7 +42,7 @@ public class MovieServiceImpl implements MovieService {
     public MovieResponse getAllMovies() {
         List<Movie> movies = movieRepository.findAll();
         List<MovieDTO> movieList = movies.stream()
-                .map(movie -> new MovieDTO(movie.getId(), movie.getName(), movie.getDescription(), movie.getImageUrl(), movie.getTvSeries(), movie.getMovieGenres()))
+                .map(movie -> new MovieDTO(movie.getId(), movie.getName(), movie.getDescription(), movie.getImageUrl(), movie.getTvSeries()))
                 .toList();
         MovieResponse movieResponse = new MovieResponse();
         movieResponse.setMovies(movieList);

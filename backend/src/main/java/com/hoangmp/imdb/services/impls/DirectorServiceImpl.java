@@ -50,7 +50,7 @@ public class DirectorServiceImpl implements DirectorService {
                 .map(director -> modelMapper.map(director, DirectorDTO.class))
                 .toList();
         DirectorResponse response = new DirectorResponse();
-        response.setDirectorDTOList(directorDTOList);
+        response.setDirectors(directorDTOList);
         return response;
     }
 

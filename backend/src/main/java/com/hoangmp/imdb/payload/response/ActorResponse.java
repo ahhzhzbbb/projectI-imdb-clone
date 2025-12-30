@@ -7,5 +7,5 @@ import java.util.List;
 
 @Data
 public class ActorResponse {
-    List<ActorDTO> actorDTOList;
+    List<ActorDTO> actors;
 }

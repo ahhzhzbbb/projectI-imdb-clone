@@ -12,5 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DirectorResponse {
-    List<DirectorDTO> directorDTOList;
+    List<DirectorDTO> directors;
 }

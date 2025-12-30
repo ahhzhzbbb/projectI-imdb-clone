@@ -9,5 +9,5 @@ import java.util.List;
 @Setter
 @Getter
 public class GenreResponse {
-    List<GenreDTO> genreDTOList;
+    List<GenreDTO> genres;
 }

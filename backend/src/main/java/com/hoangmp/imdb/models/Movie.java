@@ -57,7 +57,8 @@ public class Movie {
     @OneToMany(
             mappedBy = "movie",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
     private Set<MovieGenre> movieGenres = new HashSet<>();
 }

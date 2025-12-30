@@ -46,7 +46,7 @@ public class ActorServiceImpl implements ActorService {
                 .toList();
 
         ActorResponse response = new ActorResponse();
-        response.setActorDTOList(actorDTOList);
+        response.setActors(actorDTOList);
         return response;
     }
 
