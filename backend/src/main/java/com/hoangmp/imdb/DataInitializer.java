@@ -1,13 +1,10 @@
 package com.hoangmp.imdb;
 
-import com.hoangmp.imdb.models.Episode;
-import com.hoangmp.imdb.models.Movie;
-import com.hoangmp.imdb.models.Season;
-import com.hoangmp.imdb.repositories.EpisodeRepository;
-import com.hoangmp.imdb.repositories.MovieRepository;
-import com.hoangmp.imdb.repositories.SeasonRepository;
+import com.hoangmp.imdb.models.*;
+import com.hoangmp.imdb.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,7 +14,10 @@ public class DataInitializer implements CommandLineRunner {
     private final MovieRepository movieRepository;
     private final EpisodeRepository episodeRepository;
     private final SeasonRepository seasonRepository;
-//    private final SeasonRepository seasonRepository;
+    private final GenreRepository genreRepository;
+    private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
@@ -50,5 +50,40 @@ public class DataInitializer implements CommandLineRunner {
         episode.setSeason(movie.getSeasons().getFirst());
 
         episodeRepository.save(episode);
+
+        Genre genre1 = new Genre();
+        genre1.setName("Animation");
+        genre1.setDescription("Animation is a form of visual storytelling that involves creating visual art and motion through the use of various techniques and technologies. In animation, images are manipulated to create the illusion of movement, bringing characters, objects, and environments to life. Animation can encompass a wide range of styles, themes, and intended audiences, making it a diverse and versatile form of storytelling.");
+
+        Genre genre2 = new Genre();
+        genre2.setName("Comedy");
+        genre2.setDescription("The comedy genre refers to a category of entertainment that aims to amuse and entertain audiences by using humor, wit, and comedic situations. Comedies are created with the primary intention of eliciting laughter and providing lighthearted enjoyment. They encompass a wide range of styles, tones, and themes, appealing to various tastes and audiences.");
+
+        genreRepository.save(genre1);
+        genreRepository.save(genre2);
+
+        Role role = new Role();
+        role.setRoleName(AppRole.ROLE_ADMIN);
+
+        roleRepository.save(role);
+
+        Role role1 = new Role();
+        role1.setRoleName(AppRole.ROLE_USER);
+
+        roleRepository.save(role1);
+
+        User newUser = new User();
+        newUser.setUsername("hoangmp");
+        newUser.setPassword(passwordEncoder.encode("password"));
+        newUser.setPhoneNumber("0585424988");
+        newUser.setRole(role);
+        userRepository.save(newUser);
+
+        User newUser1 = new User();
+        newUser1.setUsername("user1");
+        newUser1.setPassword(passwordEncoder.encode("password"));
+        newUser1.setPhoneNumber("0585424988");
+        newUser1.setRole(role1);
+        userRepository.save(newUser1);
     }
 }

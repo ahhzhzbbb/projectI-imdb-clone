@@ -4,8 +4,10 @@ import com.hoangmp.imdb.payload.dto.ActorDTO;
 import com.hoangmp.imdb.payload.request.ActorRequest;
 import com.hoangmp.imdb.payload.response.ActorResponse;
 import com.hoangmp.imdb.services.ActorService;
+import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /*
@@ -21,24 +23,28 @@ public class ActorController {
     @Autowired
     private ActorService actorService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/actor")
     public ResponseEntity<ActorDTO> createActor(@RequestBody ActorRequest request) {
         ActorDTO response = actorService.createActor(request);
         return ResponseEntity.ok().body(response);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/actor/{id}")
     public ResponseEntity<ActorDTO> deleteActor(@PathVariable Long id) {
         ActorDTO response = actorService.deleteActor(id);
         return ResponseEntity.ok().body(response);
     }
 
+    @PermitAll
     @GetMapping("/actors")
     public ResponseEntity<ActorResponse> getAllActors() {
         ActorResponse response = actorService.getAllActors();
         return ResponseEntity.ok().body(response);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/actor/{id}")
     public ResponseEntity<ActorDTO> updateActor(@PathVariable Long id, @RequestBody ActorRequest request) {
         ActorDTO response = actorService.updateActor(id, request);

@@ -19,6 +19,5 @@ public class MovieDetailDTO {
     private String imageUrl;
     private String trailerUrl;
     private Boolean tvSeries;
-    private Set<MovieGenre> movieGenres;
     private List<SeasonDetailDTO> seasons;
 }

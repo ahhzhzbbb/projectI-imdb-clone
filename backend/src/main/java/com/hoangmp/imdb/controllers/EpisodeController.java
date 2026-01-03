@@ -5,10 +5,12 @@ import com.hoangmp.imdb.payload.request.EpisodeRequest;
 import com.hoangmp.imdb.services.impls.EpisodeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@PreAuthorize("hasRole('ADMIN')")
 public class EpisodeController {
     @Autowired
     private EpisodeServiceImpl episodeService;
