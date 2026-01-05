@@ -1,6 +1,7 @@
 package com.hoangmp.imdb.payload.dto;
 
 import com.hoangmp.imdb.models.MovieGenre;
+import jakarta.persistence.Column;
 import lombok.*;
 
 import java.util.HashSet;
@@ -17,4 +18,6 @@ public class MovieDTO {
     private String description;
     private String imageUrl;
     private Boolean tvSeries;
+    private Double averageScore;
+    private Integer ratingCount;
 }

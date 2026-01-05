@@ -19,5 +19,7 @@ public class MovieDetailDTO {
     private String imageUrl;
     private String trailerUrl;
     private Boolean tvSeries;
+    private Double averageScore;
+    private Integer ratingCount;
     private List<SeasonDetailDTO> seasons;
 }

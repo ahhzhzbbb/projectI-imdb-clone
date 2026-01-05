@@ -35,6 +35,12 @@ public class Movie {
     @Column(nullable = false)
     private Boolean tvSeries;
 
+    @Column(nullable = false)
+    private Double averageScore = 0.0;
+
+    @Column(nullable = false)
+    private Integer ratingCount = 0;
+
     @OneToMany(
             mappedBy = "movie",
             cascade = CascadeType.ALL,
@@ -61,4 +67,12 @@ public class Movie {
             fetch = FetchType.LAZY
     )
     private Set<MovieGenre> movieGenres = new HashSet<>();
+
+    @OneToMany(
+            mappedBy = "movie",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private Set<Rating> ratings = new HashSet<>();
 }
