@@ -26,6 +26,10 @@ public class Actor {
     @Column(length = 500)
     private String imageUrl;
 
-    @OneToMany(mappedBy = "actor")
+    @OneToMany(
+            mappedBy = "actor",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<MovieActor> movieActors;
 }

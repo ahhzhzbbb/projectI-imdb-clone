@@ -18,6 +18,8 @@ public class DataInitializer implements CommandLineRunner {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final DirectorRepository directorRepository;
+    private final ActorRepository actorRepository;
 
     @Override
     public void run(String... args) {
@@ -85,5 +87,18 @@ public class DataInitializer implements CommandLineRunner {
         newUser1.setPhoneNumber("0585424988");
         newUser1.setRole(role1);
         userRepository.save(newUser1);
+
+        Director director = new Director();
+        director.setName("Todd White");
+        director.setMovie(movie);
+        director.setImageUrl("this is image");
+        director.setIntroduction("Todd White was born on 10 October 1969 in San Antonio, Texas, USA. He is known for The SpongeBob SquarePants Movie (2004), The New Tom & Jerry Show (1975) and Freakazoid! (1995).");
+        directorRepository.save(director);
+
+        Actor actor = new Actor();
+        actor.setName("Bob Deloes");
+        actor.setImageUrl("this is image");
+        actor.setIntroduction("Bob Deloes is known for The New Tom & Jerry Show (1975) and Tom & Jerry Kids Show (1990).");
+        actorRepository.save(actor);
     }
 }

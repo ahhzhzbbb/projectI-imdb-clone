@@ -18,8 +18,6 @@ import java.util.List;
 public class MovieGenreController {
     @Autowired
     private MovieGenreService movieGenreService;
-    @Autowired
-    private PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/movie/{movieId}/genre/{genreId}")
