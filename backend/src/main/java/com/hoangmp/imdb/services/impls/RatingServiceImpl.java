@@ -1,17 +1,19 @@
 package com.hoangmp.imdb.services.impls;
 
 import com.hoangmp.imdb.exceptions.ResourceNotFoundException;
-import com.hoangmp.imdb.models.Movie;
+import com.hoangmp.imdb.models.Episode;
 import com.hoangmp.imdb.models.Rating;
 import com.hoangmp.imdb.models.User;
 import com.hoangmp.imdb.payload.dto.RatingDTO;
-import com.hoangmp.imdb.repositories.MovieRepository;
+import com.hoangmp.imdb.payload.request.RatingRequest;
+import com.hoangmp.imdb.repositories.EpisodeRepository;
 import com.hoangmp.imdb.repositories.RatingRepository;
 import com.hoangmp.imdb.repositories.UserRepository;
 import com.hoangmp.imdb.services.RatingService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RatingServiceImpl implements RatingService {
@@ -23,40 +25,45 @@ public class RatingServiceImpl implements RatingService {
     private UserRepository userRepository;
 
     @Autowired
-    private MovieRepository movieRepository;
+    private EpisodeRepository episodeRepository;
 
     @Autowired
     private ModelMapper modelMapper;
 
+    @Transactional
     @Override
-    public RatingDTO createRating(Long userId, Long movieId, Integer score) {
+    public RatingDTO createRating(Long userId, Long episodeId, RatingRequest ratingRequest) {
         Rating rating = new Rating();
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User", "id", userId)
                 );
-        Movie movie = movieRepository.findById(movieId)
+        Episode episode = episodeRepository.findById(episodeId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Moive", "id", movieId)
+                        new ResourceNotFoundException("Episode", "id", episodeId)
                 );
+
+        Integer score = ratingRequest.getScore();
+
         rating.setUser(user);
-        rating.setMovie(movie);
+        rating.setEpisode(episode);
         rating.setScore(score);
-        Double averageScore = movie.getAverageScore();
-        Integer count = movie.getRatingCount();
+        Double averageScore = episode.getAverageScore();
+        Integer count = episode.getRatingCount();
         averageScore = (averageScore * count + score) / (count + 1);
         count += 1;
 
         ratingRepository.save(rating);
 
-        movie.setAverageScore(averageScore);
-        movie.setRatingCount(count);
+        episode.setAverageScore(averageScore);
+        episode.setRatingCount(count);
 
-        movieRepository.save(movie);
+        episodeRepository.save(episode);
 
         return modelMapper.map(rating, RatingDTO.class);
     }
 
+    @Transactional
     @Override
     public RatingDTO deleteRating(Long ratingId) {
 
@@ -65,67 +72,67 @@ public class RatingServiceImpl implements RatingService {
                         new ResourceNotFoundException("Rating", "id", ratingId)
                 );
 
-        Movie movie = rating.getMovie();
+        Episode episode = rating.getEpisode();
         int score = rating.getScore();
 
-        int count = movie.getRatingCount();
-        double averageScore = movie.getAverageScore();
+        int count = episode.getRatingCount();
+        double averageScore = episode.getAverageScore();
 
         if (count <= 1) {
-            movie.setRatingCount(0);
-            movie.setAverageScore(0.0);
+            episode.setRatingCount(0);
+            episode.setAverageScore(0.0);
         } else {
             double newAverage =
                     (averageScore * count - score) / (count - 1);
 
-            movie.setRatingCount(count - 1);
-            movie.setAverageScore(newAverage);
+            episode.setRatingCount(count - 1);
+            episode.setAverageScore(newAverage);
         }
 
         ratingRepository.delete(rating);
-        movieRepository.save(movie);
+        episodeRepository.save(episode);
 
         return modelMapper.map(rating, RatingDTO.class);
     }
 
+    @Transactional
     @Override
-    public RatingDTO updateRating(Long userId, Long movieId, Integer score) {
+    public RatingDTO updateRating(Long userId, Long episodeId, RatingRequest ratingRequest) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User", "id", userId)
                 );
-        Movie movie = movieRepository.findById(movieId)
+        Episode episode = episodeRepository.findById(episodeId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Moive", "id", movieId)
+                        new ResourceNotFoundException("Episode", "id", episodeId)
                 );
 
-        Rating rating = ratingRepository.findByUserAndMovie(user, movie);
+        Rating rating = ratingRepository.findByUserAndEpisode(user, episode);
 
         if(rating == null) {
             throw new ResourceNotFoundException(
                     "Rating",
-                    "userId & movieId",
-                    userId + ", " + movieId
+                    "userId & episodeId",
+                    userId + ", " + episodeId
             );
         }
 
+        Integer score = ratingRequest.getScore();
+
         Integer oldScore = rating.getScore();
         rating.setScore(score);
-        Double averageScore = movie.getAverageScore();
-        Integer count = movie.getRatingCount();
+        Double averageScore = episode.getAverageScore();
+        Integer count = episode.getRatingCount();
         averageScore = (averageScore * count - oldScore + score) / count;
 
         ratingRepository.save(rating);
-        ratingRepository.save(rating);
 
-        movie.setAverageScore(averageScore);
-        movie.setRatingCount(count);
+        episode.setAverageScore(averageScore);
+        episode.setRatingCount(count);
 
-        movieRepository.save(movie);
+        episodeRepository.save(episode);
 
         return modelMapper.map(rating, RatingDTO.class);
     }
-
-
 }

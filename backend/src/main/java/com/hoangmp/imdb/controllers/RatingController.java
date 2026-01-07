@@ -1,7 +1,7 @@
 package com.hoangmp.imdb.controllers;
 
-import com.hoangmp.imdb.models.Rating;
 import com.hoangmp.imdb.payload.dto.RatingDTO;
+import com.hoangmp.imdb.payload.request.RatingRequest;
 import com.hoangmp.imdb.security.service.UserDetailsImpl;
 import com.hoangmp.imdb.services.RatingService;
 import jakarta.annotation.security.PermitAll;
@@ -17,35 +17,35 @@ public class RatingController {
     private RatingService ratingService;
 
     @PermitAll
-    @PostMapping("/movie/{movieId}/rating/{score}")
+    @PostMapping("/episode/{episodeId}/rating")
     public ResponseEntity<RatingDTO> rateMovie(
-            @PathVariable Long movieId,
+            @PathVariable Long episodeId,
             Authentication authentication,
-            @PathVariable Integer score
+            @RequestBody RatingRequest request
     ) {
         UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
         Long userId = user.getId();
-        RatingDTO response = ratingService.createRating(userId, movieId, score);
+        RatingDTO response = ratingService.createRating(userId, episodeId, request);
         return ResponseEntity.ok().body(response);
     }
 
     @PermitAll
-    @DeleteMapping("/movie/rating/{id}")
+    @DeleteMapping("/episode/rating/{id}")
     public ResponseEntity<RatingDTO> deleteRating(@PathVariable Long id) {
         RatingDTO response = ratingService.deleteRating(id);
         return ResponseEntity.ok().body(response);
     }
 
     @PermitAll
-    @PutMapping("/movie/{movieId}/rating/{score}")
+    @PutMapping("/episode/{episodeId}/rating")
     public ResponseEntity<RatingDTO> updateRating(
-            @PathVariable Long movieId,
+            @PathVariable Long episodeId,
             Authentication authentication,
-            @PathVariable Integer score
+            @RequestBody RatingRequest request
     ) {
         UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
         Long userId = user.getId();
-        RatingDTO response = ratingService.updateRating(userId, movieId, score);
+        RatingDTO response = ratingService.updateRating(userId, episodeId, request);
         return ResponseEntity.ok().body(response);
     }
 }

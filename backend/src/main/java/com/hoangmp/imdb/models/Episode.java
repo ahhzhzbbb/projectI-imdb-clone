@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -34,5 +37,19 @@ public class Episode {
     @ManyToOne
     @JoinColumn(name = "season_id", nullable = false)
     private Season season;
+
+    @Column(nullable = false)
+    private Double averageScore = 0.0;
+
+    @Column(nullable = false)
+    private Integer ratingCount = 0;
+
+    @OneToMany(
+            mappedBy = "episode",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private Set<Rating> ratings = new HashSet<>();
 }
 

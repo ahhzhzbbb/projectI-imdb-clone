@@ -41,6 +41,14 @@ public class User {
     )
     private Set<Rating> ratings = new HashSet<>();
 
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private Set<Review> reviews = new HashSet<>();
+
     public User(String username, String password, String phoneNumber) {
         this.username = username;
         this.password = password;

@@ -9,9 +9,9 @@ import lombok.Setter;
 @Entity
 @Table(
         name = "ratings",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"user_id", "movie_id"})
-        }
+        uniqueConstraints = @UniqueConstraint(
+                columnNames = {"user_id", "episode_id"}
+        )
 )
 @Getter
 @Setter
@@ -25,11 +25,11 @@ public class Rating {
     @Max(10)
     private Integer score;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "movie_id", nullable = false)
-    private Movie movie;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "episode_id")
+    private Episode episode;
 }

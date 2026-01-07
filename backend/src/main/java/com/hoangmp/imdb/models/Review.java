@@ -4,13 +4,21 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(
+        name = "reviews",
+        uniqueConstraints = @UniqueConstraint(
+                columnNames = {"user_id", "movie_id"}
+        )
+)
+@Getter
+@Setter
 public class Review {
 
     @Id
@@ -21,14 +29,18 @@ public class Review {
     @Max(10)
     private Integer score;
 
-    @Column(nullable = false)
+    private Boolean isSpoiler = false;
+
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-    private LocalDate createAt = LocalDate.now();
+    private LocalDate createdAt = LocalDate.now();
 
-    private String comment;
-
-    @ManyToOne
-    @JoinColumn()
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "movie_id", nullable = false)
+    private Movie movie;
 }

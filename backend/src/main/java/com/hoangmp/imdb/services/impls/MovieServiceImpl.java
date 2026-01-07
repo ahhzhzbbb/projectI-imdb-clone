@@ -25,7 +25,6 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieDTO createMovie(MovieRequest movieRequest) {
-//        Movie newMovie = modelMapper.map(movieRequest, Movie.class);
         Movie newMovie = new Movie();
         modelMapper.map(movieRequest, newMovie);
 
@@ -34,15 +33,14 @@ public class MovieServiceImpl implements MovieService {
         newMovie.getSeasons().add(season1);
 
         movieRepository.save(newMovie);
-        MovieDTO response = modelMapper.map(newMovie, MovieDTO.class);
-        return response;
+        return modelMapper.map(newMovie, MovieDTO.class);
     }
 
     @Override
     public MovieResponse getAllMovies() {
         List<Movie> movies = movieRepository.findAll();
         List<MovieDTO> movieList = movies.stream()
-                .map(movie -> new MovieDTO(movie.getId(), movie.getName(), movie.getDescription(), movie.getImageUrl(), movie.getTvSeries(), movie.getAverageScore(), movie.getRatingCount()))
+                .map(movie -> new MovieDTO(movie.getId(), movie.getName(), movie.getDescription(), movie.getImageUrl(), movie.getTvSeries(), movie.getAverageScore(), movie.getReviewCount()))
                 .toList();
         MovieResponse movieResponse = new MovieResponse();
         movieResponse.setMovies(movieList);
@@ -55,8 +53,7 @@ public class MovieServiceImpl implements MovieService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Movie", "id", movieId)
                 );
-        MovieDetailDTO movieDetailDTO = modelMapper.map(movie, MovieDetailDTO.class);
-        return movieDetailDTO;
+        return modelMapper.map(movie, MovieDetailDTO.class);
     }
 
     @Override

@@ -39,7 +39,7 @@ public class Movie {
     private Double averageScore = 0.0;
 
     @Column(nullable = false)
-    private Integer ratingCount = 0;
+    private Integer reviewCount = 0;
 
     @OneToMany(
             mappedBy = "movie",
@@ -74,5 +74,5 @@ public class Movie {
             orphanRemoval = true,
             fetch = FetchType.LAZY
     )
-    private Set<Rating> ratings = new HashSet<>();
+    private Set<Review> reviews = new HashSet<>();
 }

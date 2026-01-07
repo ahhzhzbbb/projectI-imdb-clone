@@ -1,4 +1,4 @@
-package com.hoangmp.imdb.payload.dto;
+package com.hoangmp.imdb.payload.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RatingDTO {
-    private Long userId;
-    private Long episodeId;
+public class RatingRequest {
     private Integer score;
 }
