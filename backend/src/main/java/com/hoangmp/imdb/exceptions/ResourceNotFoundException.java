@@ -1,7 +1,9 @@
 package com.hoangmp.imdb.exceptions;
 
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@Getter
+@Setter
 @NoArgsConstructor
 public class ResourceNotFoundException extends RuntimeException {
     private String resourceName;

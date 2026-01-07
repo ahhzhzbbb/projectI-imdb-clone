@@ -5,7 +5,7 @@ import com.hoangmp.imdb.payload.request.DirectorRequest;
 import com.hoangmp.imdb.payload.response.DirectorResponse;
 import com.hoangmp.imdb.services.DirectorService;
 import jakarta.annotation.security.PermitAll;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +19,9 @@ Cac api gom co:
  */
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class DirectorController {
-    @Autowired
-    private DirectorService directorService;
+    private final DirectorService directorService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/director")

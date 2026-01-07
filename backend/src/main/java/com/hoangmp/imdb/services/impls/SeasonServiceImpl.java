@@ -8,25 +8,24 @@ import com.hoangmp.imdb.payload.dto.SeasonDetailDTO;
 import com.hoangmp.imdb.repositories.MovieRepository;
 import com.hoangmp.imdb.repositories.SeasonRepository;
 import com.hoangmp.imdb.services.SeasonService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 
 @Service
+@RequiredArgsConstructor
 public class SeasonServiceImpl implements SeasonService {
 
-    @Autowired
-    private SeasonRepository seasonRepository;
+    private final SeasonRepository seasonRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private MovieRepository movieRepository;
+    private final MovieRepository movieRepository;
 
+    @Transactional
     @Override
     public SeasonDTO createSeason(Long movieId) {
         Movie movie = movieRepository.findById(movieId)
@@ -63,7 +62,6 @@ public class SeasonServiceImpl implements SeasonService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Season", "id", seasonId)
                 );
-        SeasonDetailDTO seasonDetailDTO = modelMapper.map(season, SeasonDetailDTO.class);
-        return seasonDetailDTO;
+        return modelMapper.map(season, SeasonDetailDTO.class);
     }
 }

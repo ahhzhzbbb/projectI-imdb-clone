@@ -3,7 +3,7 @@ package com.hoangmp.imdb.controllers;
 import com.hoangmp.imdb.payload.dto.EpisodeDTO;
 import com.hoangmp.imdb.payload.request.EpisodeRequest;
 import com.hoangmp.imdb.services.impls.EpisodeServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @PreAuthorize("hasRole('ADMIN')")
+@RequiredArgsConstructor
 public class EpisodeController {
-    @Autowired
-    private EpisodeServiceImpl episodeService;
+    private final EpisodeServiceImpl episodeService;
 
     @PostMapping("/seasons/{seasonId}/episode")
     public ResponseEntity<EpisodeDTO> createEpisode(@PathVariable Long seasonId, @RequestBody EpisodeRequest request) {

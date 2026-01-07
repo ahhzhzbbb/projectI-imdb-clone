@@ -2,9 +2,8 @@ package com.hoangmp.imdb.payload.request;
 
 import lombok.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class GenreRequest {
     private String name;
     private String description;

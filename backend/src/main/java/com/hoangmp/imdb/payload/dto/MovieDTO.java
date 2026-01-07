@@ -1,12 +1,6 @@
 package com.hoangmp.imdb.payload.dto;
 
-import com.hoangmp.imdb.models.MovieGenre;
-import jakarta.persistence.Column;
 import lombok.*;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter

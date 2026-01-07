@@ -1,8 +1,9 @@
 package com.hoangmp.imdb.payload.request;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 public class ActorRequest {
     private String name;
     private String introduction;

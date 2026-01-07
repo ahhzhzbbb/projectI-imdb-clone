@@ -5,16 +5,16 @@ import com.hoangmp.imdb.payload.request.RatingRequest;
 import com.hoangmp.imdb.security.service.UserDetailsImpl;
 import com.hoangmp.imdb.services.RatingService;
 import jakarta.annotation.security.PermitAll;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class RatingController {
-    @Autowired
-    private RatingService ratingService;
+    private final RatingService ratingService;
 
     @PermitAll
     @PostMapping("/episode/{episodeId}/rating")

@@ -8,22 +8,20 @@ import com.hoangmp.imdb.payload.request.EpisodeRequest;
 import com.hoangmp.imdb.repositories.EpisodeRepository;
 import com.hoangmp.imdb.repositories.SeasonRepository;
 import com.hoangmp.imdb.services.EpisodeService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class EpisodeServiceImpl implements EpisodeService {
 
-    @Autowired
-    private EpisodeRepository episodeRepository;
+    private final EpisodeRepository episodeRepository;
 
-    @Autowired
-    private SeasonRepository seasonRepository;
+    private final SeasonRepository seasonRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @Transactional
     @Override

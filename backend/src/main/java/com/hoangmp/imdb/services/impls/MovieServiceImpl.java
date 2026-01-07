@@ -9,20 +9,21 @@ import com.hoangmp.imdb.payload.request.MovieRequest;
 import com.hoangmp.imdb.payload.response.MovieResponse;
 import com.hoangmp.imdb.repositories.MovieRepository;
 import com.hoangmp.imdb.services.MovieService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
-    @Autowired
-    public ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    public MovieRepository movieRepository;
+    private final MovieRepository movieRepository;
 
+    @Transactional
     @Override
     public MovieDTO createMovie(MovieRequest movieRequest) {
         Movie newMovie = new Movie();
@@ -56,6 +57,7 @@ public class MovieServiceImpl implements MovieService {
         return modelMapper.map(movie, MovieDetailDTO.class);
     }
 
+    @Transactional
     @Override
     public MovieDTO deleteMovie(Long movieId) {
 

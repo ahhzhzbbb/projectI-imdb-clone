@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "movies")
 @Getter
 @Setter
 @NoArgsConstructor

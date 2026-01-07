@@ -7,26 +7,24 @@ import com.hoangmp.imdb.payload.request.DirectorRequest;
 import com.hoangmp.imdb.payload.response.DirectorResponse;
 import com.hoangmp.imdb.repositories.DirectorRepository;
 import com.hoangmp.imdb.services.DirectorService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class DirectorServiceImpl implements DirectorService {
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private DirectorRepository directorRepository;
+    private final DirectorRepository directorRepository;
 
     @Override
     public DirectorDTO createDirector(DirectorRequest directorRequest) {
         Director newDirector = modelMapper.map(directorRequest, Director.class);
         directorRepository.save(newDirector);
-        DirectorDTO response = modelMapper.map(newDirector, DirectorDTO.class);
-        return response;
+        return modelMapper.map(newDirector, DirectorDTO.class);
     }
 
     @Override

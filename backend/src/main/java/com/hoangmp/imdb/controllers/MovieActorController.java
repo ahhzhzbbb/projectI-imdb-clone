@@ -5,7 +5,7 @@ import com.hoangmp.imdb.payload.dto.MovieActorDTO;
 import com.hoangmp.imdb.payload.dto.MovieDTO;
 import com.hoangmp.imdb.services.MovieActorService;
 import jakarta.annotation.security.PermitAll;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +14,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class MovieActorController {
-    @Autowired
-    private MovieActorService movieActorService;
+    private final MovieActorService movieActorService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/movie/{movieId}/actor/{actorId}")

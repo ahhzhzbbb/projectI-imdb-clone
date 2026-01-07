@@ -5,7 +5,7 @@ import com.hoangmp.imdb.payload.request.ActorRequest;
 import com.hoangmp.imdb.payload.response.ActorResponse;
 import com.hoangmp.imdb.services.ActorService;
 import jakarta.annotation.security.PermitAll;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +18,10 @@ Cac api co san:
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class ActorController {
 
-    @Autowired
-    private ActorService actorService;
+    private final ActorService actorService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/actor")

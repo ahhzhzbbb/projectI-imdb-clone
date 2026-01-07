@@ -6,16 +6,16 @@ import com.hoangmp.imdb.payload.request.MovieRequest;
 import com.hoangmp.imdb.payload.response.MovieResponse;
 import com.hoangmp.imdb.services.MovieService;
 import jakarta.annotation.security.PermitAll;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class MovieController {
-    @Autowired
-    private MovieService movieService;
+    private final MovieService movieService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/movie")

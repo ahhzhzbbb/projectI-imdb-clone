@@ -1,12 +1,9 @@
 package com.hoangmp.imdb.payload.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class EpisodeRequest {
     private Integer episodeNumber;
     private String title;

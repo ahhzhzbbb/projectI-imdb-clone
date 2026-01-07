@@ -5,8 +5,7 @@ import com.hoangmp.imdb.payload.dto.MovieDTO;
 import com.hoangmp.imdb.payload.dto.MovieGenreDTO;
 import com.hoangmp.imdb.services.MovieGenreService;
 import jakarta.annotation.security.PermitAll;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +14,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class MovieGenreController {
-    @Autowired
-    private MovieGenreService movieGenreService;
+    private final MovieGenreService movieGenreService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/movie/{movieId}/genre/{genreId}")

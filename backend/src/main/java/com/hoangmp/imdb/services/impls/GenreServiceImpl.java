@@ -7,21 +7,20 @@ import com.hoangmp.imdb.payload.request.GenreRequest;
 import com.hoangmp.imdb.payload.response.GenreResponse;
 import com.hoangmp.imdb.repositories.GenreRepository;
 import com.hoangmp.imdb.services.GenreService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
 
-    @Autowired
-    private GenreRepository genreRepository;
+    private final GenreRepository genreRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @Transactional
     @Override

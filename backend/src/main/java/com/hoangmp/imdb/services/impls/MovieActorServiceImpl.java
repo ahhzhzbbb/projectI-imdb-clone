@@ -11,27 +11,24 @@ import com.hoangmp.imdb.repositories.ActorRepository;
 import com.hoangmp.imdb.repositories.MovieActorRepository;
 import com.hoangmp.imdb.repositories.MovieRepository;
 import com.hoangmp.imdb.services.MovieActorService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MovieActorServiceImpl implements MovieActorService {
 
-    @Autowired
-    private MovieRepository movieRepository;
+    private final MovieRepository movieRepository;
 
-    @Autowired
-    private ActorRepository actorRepository;
+    private final ActorRepository actorRepository;
 
-    @Autowired
-    private MovieActorRepository movieActorRepository;
+    private final MovieActorRepository movieActorRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @Transactional
     @Override

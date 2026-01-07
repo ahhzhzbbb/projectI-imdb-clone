@@ -14,7 +14,6 @@ import com.hoangmp.imdb.security.response.UserInfoResponse;
 import com.hoangmp.imdb.security.service.UserDetailsImpl;
 import com.hoangmp.imdb.services.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,8 +42,6 @@ public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder encoder;
 
-    private final ModelMapper modelMapper;
-
     @Override
     public AuthenticationResult login(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager
@@ -71,6 +68,7 @@ public class AuthServiceImpl implements AuthService {
         return new AuthenticationResult(response, jwtCookie);
     }
 
+    @Transactional
     @Override
     public ResponseEntity<MessageResponse> register(SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -86,24 +84,19 @@ public class AuthServiceImpl implements AuthService {
         );
 
         String strRole = signUpRequest.getRole();
-        Role role = new Role();
+        new Role();
+        Role role;
 
         if (strRole == null) {
-            Role userRole = roleRepository.findByRoleName(AppRole.ROLE_USER)
+            role = roleRepository.findByRoleName(AppRole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            role = userRole;
         } else {
-            switch (strRole) {
-                case "admin":
-                    Role adminRole = roleRepository.findByRoleName(AppRole.ROLE_ADMIN)
-                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                    role = adminRole;
-
-                    break;
-                default:
-                    Role userRole = roleRepository.findByRoleName(AppRole.ROLE_USER)
-                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                    role = userRole;
+            if (strRole.equals("admin")) {
+                role = roleRepository.findByRoleName(AppRole.ROLE_ADMIN)
+                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            } else {
+                role = roleRepository.findByRoleName(AppRole.ROLE_USER)
+                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             }
         }
 

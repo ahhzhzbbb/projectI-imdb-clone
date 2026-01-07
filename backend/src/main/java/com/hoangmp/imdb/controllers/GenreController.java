@@ -5,6 +5,7 @@ import com.hoangmp.imdb.payload.request.GenreRequest;
 import com.hoangmp.imdb.payload.response.GenreResponse;
 import com.hoangmp.imdb.services.GenreService;
 import jakarta.annotation.security.PermitAll;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class GenreController {
-    @Autowired
-    private GenreService genreService;
+    private final GenreService genreService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/genre")

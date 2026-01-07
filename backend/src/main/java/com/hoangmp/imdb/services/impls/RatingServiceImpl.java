@@ -10,25 +10,22 @@ import com.hoangmp.imdb.repositories.EpisodeRepository;
 import com.hoangmp.imdb.repositories.RatingRepository;
 import com.hoangmp.imdb.repositories.UserRepository;
 import com.hoangmp.imdb.services.RatingService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class RatingServiceImpl implements RatingService {
 
-    @Autowired
-    private RatingRepository ratingRepository;
+    private final RatingRepository ratingRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private EpisodeRepository episodeRepository;
+    private final EpisodeRepository episodeRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @Transactional
     @Override

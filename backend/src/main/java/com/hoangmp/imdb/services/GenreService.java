@@ -5,9 +5,9 @@ import com.hoangmp.imdb.payload.request.GenreRequest;
 import com.hoangmp.imdb.payload.response.GenreResponse;
 
 public interface GenreService {
-    public GenreDTO createGenre(GenreRequest genreRequest);
+    GenreDTO createGenre(GenreRequest genreRequest);
 
-    public GenreDTO deleteGenre(Long genreId);
+    GenreDTO deleteGenre(Long genreId);
 
-    public GenreResponse getAllGenre();
+    GenreResponse getAllGenre();
 }

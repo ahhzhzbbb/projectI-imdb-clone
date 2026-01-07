@@ -1,8 +1,11 @@
 package com.hoangmp.imdb.payload.dto;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ActorDTO {
     private Long id;
     private String name;

@@ -7,21 +7,22 @@ import com.hoangmp.imdb.payload.request.ActorRequest;
 import com.hoangmp.imdb.payload.response.ActorResponse;
 import com.hoangmp.imdb.repositories.ActorRepository;
 import com.hoangmp.imdb.services.ActorService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ActorServiceImpl implements ActorService {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private ActorRepository actorRepository;
+    private final ActorRepository actorRepository;
 
+    @Transactional
     @Override
     public ActorDTO createActor(ActorRequest actorRequest ) {
         Actor newActor = modelMapper.map(actorRequest, Actor.class);
@@ -29,6 +30,7 @@ public class ActorServiceImpl implements ActorService {
         return modelMapper.map(newActor, ActorDTO.class);
     }
 
+    @Transactional
     @Override
     public ActorDTO deleteActor(Long actorId) {
         Actor actor = actorRepository.findById(actorId)
@@ -50,6 +52,7 @@ public class ActorServiceImpl implements ActorService {
         return response;
     }
 
+    @Transactional
     @Override
     public ActorDTO updateActor(Long actorId, ActorRequest actorRequest) {
         Actor actor = actorRepository.findById(actorId)
