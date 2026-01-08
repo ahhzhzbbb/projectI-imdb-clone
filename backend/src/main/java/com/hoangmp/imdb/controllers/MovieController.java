@@ -11,12 +11,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+/*
+    * Movie Controller
+ */
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class MovieController {
     private final MovieService movieService;
 
+    /* API tạo phim mới */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/movie")
     public ResponseEntity<MovieDTO> createMovie(@RequestBody MovieRequest movieRequest) {
@@ -24,6 +28,7 @@ public class MovieController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API lấy tất cả phim */
     @PermitAll
     @GetMapping("/movies")
     public ResponseEntity<MovieResponse> getAllMovies() {
@@ -31,6 +36,7 @@ public class MovieController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API cập nhật thông tin phim */
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/movie/{movieId}")
     public ResponseEntity<MovieDTO> deleteMovie(@PathVariable Long movieId) {
@@ -38,6 +44,7 @@ public class MovieController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API lấy chi tiết phim bao gồm các season và tập phim */
     @PermitAll
     @GetMapping("/movie/{movieId}/seasons")
     public ResponseEntity<MovieDetailDTO> getMovieDetail(@PathVariable Long movieId) {

@@ -8,6 +8,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/*
+    * Model Movie được sử dụng để lưu trữ thông tin về phim trong hệ thống.
+ */
 @Entity
 @Getter
 @Setter

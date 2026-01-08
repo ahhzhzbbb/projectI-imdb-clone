@@ -3,6 +3,9 @@ package com.hoangmp.imdb.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+/*
+    * Model Role được sử dụng để lưu trữ thông tin về vai trò của người dùng trong hệ thống.
+ */
 @Entity
 @Table(name = "roles")
 @Getter

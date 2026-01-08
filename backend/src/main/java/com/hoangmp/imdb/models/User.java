@@ -8,6 +8,9 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+/*
+    * Model User được sử dụng để lưu trữ thông tin về người dùng trong hệ thống.
+ */
 @Entity
 @Table(name = "users")
 @Getter

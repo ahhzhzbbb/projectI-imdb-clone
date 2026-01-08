@@ -3,6 +3,9 @@ package com.hoangmp.imdb.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+/*
+    * Model MovieGenre được sử dụng để lưu trữ thông tin về mối quan hệ giữa phim và thể loại phim.
+ */
 @Entity
 @Table(
         name = "movie_genre",

@@ -3,6 +3,9 @@ package com.hoangmp.imdb.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+/*
+    * Model Director được sử dụng để lưu trữ thông tin về đạo diễn trong hệ thống.
+ */
 @Entity
 @Getter
 @Setter

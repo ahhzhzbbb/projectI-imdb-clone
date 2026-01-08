@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+/*
+    * Model Review được sử dụng để lưu trữ thông tin về đánh giá (review) của người dùng cho các bộ phim.
+ */
 @Entity
 @Table(
         name = "reviews",

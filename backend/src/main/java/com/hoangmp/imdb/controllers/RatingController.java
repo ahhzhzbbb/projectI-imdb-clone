@@ -10,12 +10,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+/*
+    * Rating Controller
+ */
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class RatingController {
     private final RatingService ratingService;
 
+    /* API đánh giá một tập phim */
     @PermitAll
     @PostMapping("/episode/{episodeId}/rating")
     public ResponseEntity<RatingDTO> rateMovie(
@@ -29,6 +33,7 @@ public class RatingController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API xóa đánh giá của một tập phim */
     @PermitAll
     @DeleteMapping("/episode/{episodeId}/rating")
     public ResponseEntity<RatingDTO> removeRating(
@@ -41,6 +46,7 @@ public class RatingController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API cập nhật đánh giá của một tập phim */
     @PermitAll
     @PutMapping("/episode/{episodeId}/rating")
     public ResponseEntity<RatingDTO> updateRating(

@@ -5,7 +5,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+/*
+    * file này dùng để test authentication trong spring security không liên quan gì đến chức năng của project
+ */
 @RestController
 @RequestMapping("/test")
 public class TestController {

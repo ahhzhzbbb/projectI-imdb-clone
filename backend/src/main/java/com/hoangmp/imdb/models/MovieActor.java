@@ -3,6 +3,9 @@ package com.hoangmp.imdb.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+/*
+    * Model MovieActor được sử dụng để lưu trữ thông tin về mối quan hệ giữa phim và diễn viên, bao gồm vai diễn của diễn viên trong phim.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

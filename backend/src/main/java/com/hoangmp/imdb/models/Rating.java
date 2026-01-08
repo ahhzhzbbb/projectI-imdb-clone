@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 
+/*
+    * Model Rating được sử dụng để lưu trữ thông tin về đánh giá của người dùng cho các tập phim.
+ */
 @Entity
 @Table(
         name = "ratings",

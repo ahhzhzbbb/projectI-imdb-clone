@@ -7,6 +7,9 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/*
+    * Model Genre được sử dụng để lưu trữ thông tin về thể loại phim trong hệ thống.
+ */
 @Entity
 @Table(
         name = "genres",

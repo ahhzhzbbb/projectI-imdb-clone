@@ -11,9 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /*
-Cac api co san:
-    Them, sua, xoa du lieu dien vien trong database
-    lay danh sach tat ca dien vien dang co trong database
+    * Controller quản lý các API liên quan đến diễn viên
 */
 
 @RestController
@@ -23,6 +21,7 @@ public class ActorController {
 
     private final ActorService actorService;
 
+    /* API dùng để tạo mới một diễn viên mới */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/actor")
     public ResponseEntity<ActorDTO> createActor(@RequestBody ActorRequest request) {
@@ -30,6 +29,7 @@ public class ActorController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API dùng để xóa một diễn viên theo id */
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/actor/{id}")
     public ResponseEntity<ActorDTO> deleteActor(@PathVariable Long id) {
@@ -37,6 +37,7 @@ public class ActorController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API dùng để lấy danh sách tất cả diễn viên */
     @PermitAll
     @GetMapping("/actors")
     public ResponseEntity<ActorResponse> getAllActors() {
@@ -44,6 +45,7 @@ public class ActorController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API dùng để cập nhật thông tin một diễn viên theo id */
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/actor/{id}")
     public ResponseEntity<ActorDTO> updateActor(@PathVariable Long id, @RequestBody ActorRequest request) {

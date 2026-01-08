@@ -23,8 +23,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfigs {
-    private final UserDetailsService userDetailsService;
-
     private final AuthEntryPointJwt unauthorizedHandler;
 
     @Bean

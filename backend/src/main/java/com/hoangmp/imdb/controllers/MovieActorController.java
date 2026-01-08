@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/*
+    * Movie Actor Controller
+ */
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class MovieActorController {
     private final MovieActorService movieActorService;
 
+    /* API thêm diễn viên vào phim */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/movie/{movieId}/actor/{actorId}")
     public ResponseEntity<MovieActorDTO> addActorToMovie(@PathVariable Long movieId, @PathVariable Long actorId) {
@@ -25,6 +29,7 @@ public class MovieActorController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API xóa diễn viên khỏi phim */
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/movie/{movieId}/actor/{actorId}")
     public ResponseEntity<MovieActorDTO> removeActorFromMovie(@PathVariable Long movieId, @PathVariable Long actorId) {
@@ -32,6 +37,7 @@ public class MovieActorController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API lấy tất cả diễn viên của một phim */
     @PermitAll
     @GetMapping("/movie/{movieId}/actors")
     public ResponseEntity<List<ActorDTO>> getActorsOfMovie(@PathVariable Long movieId) {
@@ -39,6 +45,7 @@ public class MovieActorController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API lấy tất cả phim của một diễn viên */
     @PermitAll
     @GetMapping("/actor/{actorId}/movies")
     public ResponseEntity<List<MovieDTO>> getMoviesOfActor(@PathVariable Long actorId) {

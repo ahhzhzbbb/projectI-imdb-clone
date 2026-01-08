@@ -11,12 +11,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+/*
+    * Review Controller
+ */
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
 
+    /* API tạo đánh giá cho một phim */
     @PermitAll
     @PostMapping("/movie/{movieId}/review")
     public ResponseEntity<ReviewDTO> createReview(
@@ -30,6 +34,7 @@ public class ReviewController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API xóa đánh giá của một phim */
     @PermitAll
     @DeleteMapping("/movie/{movieId}/review")
     public ResponseEntity<ReviewDTO> removeReview(
@@ -42,6 +47,7 @@ public class ReviewController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API cập nhật đánh giá của một phim */
     @PermitAll
     @PutMapping("/movie/{movieId}/review")
     public ResponseEntity<ReviewDTO> updateReview(
@@ -55,6 +61,7 @@ public class ReviewController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API lấy tất cả đánh giá của một phim */
     @PermitAll
     @GetMapping("/movie/{movieId}/reviews")
     public ResponseEntity<ReviewResponse> getReviewsFromMovie(@PathVariable Long movieId) {

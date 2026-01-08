@@ -6,6 +6,9 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/*
+    * Model Episode được sử dụng để lưu trữ thông tin về các tập phim trong một mùa của series.
+ */
 @Entity
 @Getter
 @Setter

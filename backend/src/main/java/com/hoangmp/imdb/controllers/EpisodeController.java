@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+/*
+    * Episode Controller
+ */
 @RestController
 @RequestMapping("/api")
 @PreAuthorize("hasRole('ADMIN')")
@@ -15,18 +18,21 @@ import org.springframework.web.bind.annotation.*;
 public class EpisodeController {
     private final EpisodeServiceImpl episodeService;
 
+    /* API tạo tập mới cho một season */
     @PostMapping("/seasons/{seasonId}/episode")
     public ResponseEntity<EpisodeDTO> createEpisode(@PathVariable Long seasonId, @RequestBody EpisodeRequest request) {
         EpisodeDTO response = episodeService.createEpisode(seasonId, request);
         return ResponseEntity.ok().body(response);
     }
 
+    /* API cập nhật thông tin tập phim */
     @PutMapping("/episode/{id}")
     public ResponseEntity<EpisodeDTO> updateEpisode(@PathVariable Long id, @RequestBody EpisodeRequest request) {
         EpisodeDTO response = episodeService.updateEpisode(id, request);
         return ResponseEntity.ok().body(response);
     }
 
+    /* API xóa tập phim */
     @DeleteMapping("/episode/{id}")
     public ResponseEntity<EpisodeDTO> deleteEpisode(@PathVariable Long id) {
         EpisodeDTO response = episodeService.deleteEpisode(id);

@@ -11,11 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /*
-Cac api gom co:
-    Tao mot dao dien moi trong co so du lieu
-    Xoa mot dao dien ra khoi co so du lieu
-    Cap nhap thong tin cua dao dien
-    Lay ra danh sach tat ca cac dao dien tron co so du lieu
+    * Director Controller
  */
 @RestController
 @RequestMapping("/api")
@@ -23,6 +19,7 @@ Cac api gom co:
 public class DirectorController {
     private final DirectorService directorService;
 
+    /* API tạo đạo diễn mới */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/director")
     public ResponseEntity<DirectorDTO> createDirector(@RequestBody DirectorRequest directorRequest) {
@@ -30,6 +27,7 @@ public class DirectorController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API xóa đạo diễn */
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/director/{directorId}")
     public ResponseEntity<DirectorDTO> deleteDirector(@PathVariable Long directorId) {
@@ -37,6 +35,7 @@ public class DirectorController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API lấy tất cả đạo diễn */
     @PermitAll
     @GetMapping("/directors")
     public ResponseEntity<DirectorResponse> getAllDirectors() {
@@ -44,6 +43,7 @@ public class DirectorController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API cập nhật thông tin đạo diễn */
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/director/{id}")
     public ResponseEntity<DirectorDTO> updateDirector(@PathVariable Long id, @RequestBody DirectorRequest directorRequest) {

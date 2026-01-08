@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/*
+    * Movie Genre Controller
+ */
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class MovieGenreController {
     private final MovieGenreService movieGenreService;
 
+    /* API thêm thể loại vào phim */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/movie/{movieId}/genre/{genreId}")
     public ResponseEntity<MovieGenreDTO> addGenreToMovie(@PathVariable Long movieId, @PathVariable Long genreId) {
@@ -25,6 +29,7 @@ public class MovieGenreController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API xóa thể loại khỏi phim */
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/movie/{movieId}/genre/{genreId}")
     public ResponseEntity<MovieGenreDTO> removeGenreFromMovie(@PathVariable Long movieId, @PathVariable Long genreId) {
@@ -32,6 +37,7 @@ public class MovieGenreController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API lấy tất cả thể loại của một phim */
     @PermitAll
     @GetMapping("/movie/{movieId}/genres")
     public ResponseEntity<List<GenreDTO>> getGenresOfMovie(@PathVariable Long movieId) {
@@ -39,6 +45,7 @@ public class MovieGenreController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API lấy tất cả phim của một thể loại */
     @PermitAll
     @GetMapping("/genre/{genreId}/movies")
     public ResponseEntity<List<MovieDTO>> getMoviesOfGenre(@PathVariable Long genreId) {

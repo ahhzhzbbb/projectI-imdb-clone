@@ -3,6 +3,9 @@ package com.hoangmp.imdb.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+/*
+    * Model WishList được sử dụng để lưu trữ thông tin về danh sách mong muốn (wish list) của người dùng, bao gồm các phim mà người dùng muốn xem sau.
+ */
 @Entity
 @Table(
         name = "wish_lists",

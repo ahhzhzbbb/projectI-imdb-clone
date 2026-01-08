@@ -1,6 +1,5 @@
 package com.hoangmp.imdb.controllers;
 
-import com.hoangmp.imdb.payload.dto.MovieDTO;
 import com.hoangmp.imdb.payload.dto.WishListDTO;
 import com.hoangmp.imdb.payload.response.MovieResponse;
 import com.hoangmp.imdb.security.service.UserDetailsImpl;
@@ -11,8 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+/*
+    * Wish List Controller
+ */
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -20,6 +20,7 @@ public class WishListController {
 
     private final WishListService wishListService;
 
+    /* API thêm phim vào wish list của người dùng */
     @PermitAll
     @PostMapping("/wishlist/movie/{movieId}")
     public ResponseEntity<WishListDTO> addMovieToWishList (
@@ -32,6 +33,7 @@ public class WishListController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API xóa phim khỏi wish list của người dùng */
     @PermitAll
     @DeleteMapping("/wishList/movie/{movieId}")
     public ResponseEntity<WishListDTO> removeMovieFromWishList (
@@ -44,6 +46,7 @@ public class WishListController {
         return ResponseEntity.ok().body(response);
     }
 
+    /* API lấy tất cả phim trong wish list của người dùng */
     @PermitAll
     @GetMapping("/wishList/movies")
     public ResponseEntity<MovieResponse> getUsersWishList(Authentication authentication) {

@@ -1,13 +1,10 @@
 package com.hoangmp.imdb.security.response;
 
-import com.hoangmp.imdb.models.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-
-import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +15,6 @@ public class UserInfoResponse {
     private String username;
     private List<String> roles;
 
-    // Profile fields
     private String phoneNumber;
 
     public UserInfoResponse(Long id, String username, String name, List<String> roles) {

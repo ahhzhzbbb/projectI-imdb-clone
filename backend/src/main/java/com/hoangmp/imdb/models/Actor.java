@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/*
+    * Model Actor được sử dụng để lưu trữ thông tin về diễn viên trong hệ thống.
+ */
 @Entity
 @Data
 @NoArgsConstructor

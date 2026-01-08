@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/*
+    * Model Season được sử dụng để lưu trữ thông tin về các mùa của một series phim.
+ */
 @Entity
 @Data
 @NoArgsConstructor
