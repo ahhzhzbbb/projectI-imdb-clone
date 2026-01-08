@@ -1,13 +1,11 @@
 package com.hoangmp.imdb.security.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDate;
-import java.util.Set;
 
 @Data
 public class SignupRequest {
@@ -21,7 +19,8 @@ public class SignupRequest {
 
     @Getter
     @Setter
-    private String role;
+    @JsonIgnore
+    private String role = "ROLE_USER";
 
     @NotBlank
     @Size(min = 10, max = 10)
