@@ -17,4 +17,3 @@ public interface MovieGenreRepository extends JpaRepository<MovieGenre, Long> {
 
     MovieGenre findByMovieAndGenre(Movie movie, Genre genre);
 }
-
