@@ -31,16 +31,27 @@ public class ReviewController {
     }
 
     @PermitAll
-    @DeleteMapping("/review/{id}")
-    public ResponseEntity<ReviewDTO> deleteReview(@PathVariable Long id) {
-        ReviewDTO response = reviewService.deleteReview(id);
+    @DeleteMapping("/movie/{movieId}/review")
+    public ResponseEntity<ReviewDTO> removeReview(
+            Authentication authentication,
+            @PathVariable Long movieId
+    ) {
+        UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
+        Long userId = user.getId();
+        ReviewDTO response = reviewService.removeReview(userId, movieId);
         return ResponseEntity.ok().body(response);
     }
 
     @PermitAll
-    @PutMapping("/review/{reviewId}")
-    public ResponseEntity<ReviewDTO> updateReview(@PathVariable Long reviewId, @RequestBody ReviewRequest request) {
-        ReviewDTO response = reviewService.updateReview(reviewId, request);
+    @PutMapping("/movie/{movieId}/review")
+    public ResponseEntity<ReviewDTO> updateReview(
+            Authentication authentication,
+            @PathVariable Long movieId,
+            @RequestBody ReviewRequest request
+    ) {
+        UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
+        Long userId = user.getId();
+        ReviewDTO response = reviewService.updateReview(userId, movieId, request);
         return ResponseEntity.ok().body(response);
     }
 

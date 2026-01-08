@@ -7,9 +7,9 @@ import com.hoangmp.imdb.payload.response.ReviewResponse;
 public interface ReviewService {
     ReviewDTO createReview(Long userId, Long movieId, ReviewRequest reviewRequest);
 
-    ReviewDTO deleteReview(Long reviewId);
+    ReviewDTO removeReview(Long userId, Long movieId);
 
-    ReviewDTO updateReview(Long reviewId, ReviewRequest reviewRequest);
+    ReviewDTO updateReview(Long userId, Long movieId, ReviewRequest reviewRequest);
 
     ReviewResponse getReviewsFromMovie(Long movieId);
 }

@@ -62,14 +62,18 @@ public class RatingServiceImpl implements RatingService {
 
     @Transactional
     @Override
-    public RatingDTO deleteRating(Long ratingId) {
-
-        Rating rating = ratingRepository.findById(ratingId)
+    public RatingDTO removeRating(Long userId, Long episodeId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Rating", "id", ratingId)
+                        new ResourceNotFoundException("User", "id", userId)
+                );
+        Episode episode = episodeRepository.findById(episodeId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Episode", "id", episodeId)
                 );
 
-        Episode episode = rating.getEpisode();
+        Rating rating = ratingRepository.findByUserAndEpisode(user, episode);
+
         int score = rating.getScore();
 
         int count = episode.getRatingCount();

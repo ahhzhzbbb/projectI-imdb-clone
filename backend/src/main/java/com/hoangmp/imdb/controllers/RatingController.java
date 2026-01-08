@@ -19,8 +19,8 @@ public class RatingController {
     @PermitAll
     @PostMapping("/episode/{episodeId}/rating")
     public ResponseEntity<RatingDTO> rateMovie(
-            @PathVariable Long episodeId,
             Authentication authentication,
+            @PathVariable Long episodeId,
             @RequestBody RatingRequest request
     ) {
         UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
@@ -30,9 +30,14 @@ public class RatingController {
     }
 
     @PermitAll
-    @DeleteMapping("/episode/rating/{id}")
-    public ResponseEntity<RatingDTO> deleteRating(@PathVariable Long id) {
-        RatingDTO response = ratingService.deleteRating(id);
+    @DeleteMapping("/episode/{episodeId}/rating")
+    public ResponseEntity<RatingDTO> removeRating(
+            Authentication authentication,
+            @PathVariable Long episodeId
+    ) {
+        UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
+        Long userId = user.getId();
+        RatingDTO response = ratingService.removeRating(userId, episodeId);
         return ResponseEntity.ok().body(response);
     }
 

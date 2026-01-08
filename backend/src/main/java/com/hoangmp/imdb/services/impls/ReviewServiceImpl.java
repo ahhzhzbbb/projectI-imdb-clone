@@ -64,13 +64,18 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public ReviewDTO deleteReview(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId)
+    public ReviewDTO removeReview(Long userId, Long movieId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Review", "id", reviewId)
+                        new ResourceNotFoundException("User", "id", userId)
+                );
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Movie", "id", movieId)
                 );
 
-        Movie movie = review.getMovie();
+        Review review = reviewRepository.findByUserAndMovie(user, movie);
+
         Integer count = movie.getReviewCount();
         Double averageScore = movie.getAverageScore();
 
@@ -94,16 +99,21 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public ReviewDTO updateReview(Long reviewId, ReviewRequest reviewRequest) {
-        Review review = reviewRepository.findById(reviewId)
+    public ReviewDTO updateReview(Long userId, Long movieId, ReviewRequest reviewRequest) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Review", "id", reviewId)
+                        new ResourceNotFoundException("User", "id", userId)
                 );
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Movie", "id", movieId)
+                );
+
+        Review review = reviewRepository.findByUserAndMovie(user, movie);
 
         Integer oldScore = review.getScore();
         modelMapper.map(reviewRequest, review);
         Integer newScore = review.getScore();
-        Movie movie = review.getMovie();
         if(!Objects.equals(oldScore, newScore)) {
             Integer count = movie.getReviewCount();
             Double averageScore = movie.getAverageScore();
