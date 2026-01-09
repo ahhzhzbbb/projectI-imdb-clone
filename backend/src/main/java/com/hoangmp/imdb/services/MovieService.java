@@ -14,5 +14,7 @@ public interface MovieService {
 
     MovieDetailDTO getMovieDetail(Long movieId);
 
+    MovieDTO updateMovie(Long movieId, MovieRequest movieRequest);
+
     MovieDTO deleteMovie(Long movieId);
 }

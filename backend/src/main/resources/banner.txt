@@ -1,0 +1,25 @@
+
+===================================================================================================
+                  -`                     hoang@hoangmp
+                 .o+`                    -------------
+                `ooo/                    OS: Arch Linux x86_64
+               `+oooo:                   Host: Cyborg 15 A12VE (REV:1.0)
+              `+oooooo:                  Kernel: Linux 6.18.2-arch2-1
+              -+oooooo+:                 Uptime: 26 mins
+            `/:-:++oooo+:                Packages: 1314 (pacman), 17 (flatpak)
+           `/++++/+++++++:               Shell: fish 4.3.1
+          `/++++++++++++++:              Display (BOE0B02): 1920x1080 in 15", 144 Hz [Built-in]
+         `/+++ooooooooooooo/`            WM: Hyprland 0.52.2 (Wayland)
+        ./ooosssso++osssssso+`           Cursor: Adwaita
+       .oossssso-````/ossssss+`          Terminal: kitty 0.44.0
+      -osssssso.      :ssssssso.         Terminal Font: JetBrainsMonoNF-Regular (11pt)
+     :osssssss/        osssso+++.        CPU: 12th Gen Intel(R) Core(TM) i7-12650H (16) @ 4.70 z
+    /ossssssss/        +ssssooo/-        GPU 1: NVIDIA GeForce RTX 4050 Max-Q / Mobile [Discret]
+  `/ossssso+/:-        -:/+osssso+-      GPU 2: Intel UHD Graphics @ 1.40 GHz [Integrated]
+ `+sso+:-`                 `.-/+oso:     Memory: 7.62 GiB / 15.32 GiB (50%)
+`++:.                           `-/+/    Swap: Disabled
+.`                                 `/    Disk (/): 94.99 GiB / 133.55 GiB (71%) - ext4
+                                         Local IP (wlo1): 192.168.1.231/24
+                                         Battery (BIF0_9): 97% [AC Connected]
+                                         Locale: en_US.UTF-8
+===================================================================================================

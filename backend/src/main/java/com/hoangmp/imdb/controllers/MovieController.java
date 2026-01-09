@@ -38,6 +38,16 @@ public class MovieController {
 
     /* API cập nhật thông tin phim */
     @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/movie/{movieId}")
+    public ResponseEntity<MovieDTO> updateMovie(
+            @PathVariable Long movieId,
+            @RequestBody MovieRequest movieRequest) {
+        MovieDTO response = movieService.updateMovie(movieId, movieRequest);
+        return ResponseEntity.ok().body(response);
+    }
+
+    /* API xóa phim */
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/movie/{movieId}")
     public ResponseEntity<MovieDTO> deleteMovie(@PathVariable Long movieId) {
         MovieDTO response = movieService.deleteMovie(movieId);

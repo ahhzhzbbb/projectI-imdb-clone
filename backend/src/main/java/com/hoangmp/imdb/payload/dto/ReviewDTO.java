@@ -14,6 +14,6 @@ public class ReviewDTO {
     private Boolean isSpoiler;
     private String content;
     private LocalDate createdAt;
-    private Long userId;
+    private String username;
     private Long movieId;
 }

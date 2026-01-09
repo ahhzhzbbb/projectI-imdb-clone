@@ -59,7 +59,10 @@ public class ReviewServiceImpl implements ReviewService {
 
         reviewRepository.save(newReview);
         movieRepository.save(movie);
-        return modelMapper.map(newReview, ReviewDTO.class);
+        ReviewDTO reviewDTO = new ReviewDTO();
+        modelMapper.map(newReview, reviewDTO);
+        reviewDTO.setUsername(user.getUsername());
+        return reviewDTO;
     }
 
     @Transactional
@@ -94,7 +97,10 @@ public class ReviewServiceImpl implements ReviewService {
 
         movieRepository.save(movie);
         reviewRepository.delete(review);
-        return modelMapper.map(review, ReviewDTO.class);
+        ReviewDTO reviewDTO = new ReviewDTO();
+        modelMapper.map(review, reviewDTO);
+        reviewDTO.setUsername(user.getUsername());
+        return reviewDTO;
     }
 
     @Transactional
@@ -122,19 +128,24 @@ public class ReviewServiceImpl implements ReviewService {
         }
         movieRepository.save(movie);
         reviewRepository.save(review);
-        return modelMapper.map(review, ReviewDTO.class);
+        ReviewDTO reviewDTO = new ReviewDTO();
+        modelMapper.map(review, reviewDTO);
+        reviewDTO.setUsername(user.getUsername());
+        return reviewDTO;
     }
 
     @Override
     public ReviewResponse getReviewsFromMovie(Long movieId) {
         List<Review> reviews = reviewRepository.getAllByMovieId(movieId);
-        List<ReviewDTO> reviewDTOS = reviews.stream()
-                .map(review -> modelMapper.map(review, ReviewDTO.class))
-                .toList();
 
-        ReviewResponse reviewResponse = new ReviewResponse();
-        reviewResponse.setReviews(reviewDTOS);
+        List<ReviewDTO> reviewDTOS = reviews.stream().map(review -> {
+            ReviewDTO dto = modelMapper.map(review, ReviewDTO.class);
+            dto.setUsername(review.getUser().getUsername());
+            return dto;
+        }).toList();
 
-        return reviewResponse;
+        ReviewResponse response = new ReviewResponse();
+        response.setReviews(reviewDTOS);
+        return response;
     }
 }

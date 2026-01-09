@@ -71,4 +71,33 @@ public class MovieServiceImpl implements MovieService {
         return modelMapper.map(movie, MovieDTO.class);
     }
 
+    @Transactional
+    @Override
+    public MovieDTO updateMovie(Long movieId, MovieRequest movieRequest) {
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Movie", "id", movieId)
+                );
+
+        // Update only non-null fields
+        if (movieRequest.getMovieName() != null && !movieRequest.getMovieName().isEmpty()) {
+            movie.setName(movieRequest.getMovieName());
+        }
+        if (movieRequest.getDescription() != null) {
+            movie.setDescription(movieRequest.getDescription());
+        }
+        if (movieRequest.getImageUrl() != null) {
+            movie.setImageUrl(movieRequest.getImageUrl());
+        }
+        if (movieRequest.getTrailerUrl() != null) {
+            movie.setTrailerUrl(movieRequest.getTrailerUrl());
+        }
+        if (movieRequest.getTvSeries() != null) {
+            movie.setTvSeries(movieRequest.getTvSeries());
+        }
+
+        movieRepository.save(movie);
+        return modelMapper.map(movie, MovieDTO.class);
+    }
+
 }
