@@ -52,4 +52,11 @@ public class ActorController {
         ActorDTO response = actorService.updateActor(id, request);
         return ResponseEntity.ok().body(response);
     }
+
+    @PermitAll
+    @GetMapping("/actor/{id}")
+    public ResponseEntity<ActorDTO> getActor(@PathVariable Long id) {
+        ActorDTO response = actorService.getActor(id);
+        return ResponseEntity.ok().body(response);
+    }
 }

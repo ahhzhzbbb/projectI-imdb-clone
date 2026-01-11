@@ -13,4 +13,6 @@ public interface ActorService {
     ActorResponse getAllActors();
 
     ActorDTO updateActor(Long actorId, ActorRequest actorRequest);
+
+    ActorDTO getActor(Long actorId);
 }

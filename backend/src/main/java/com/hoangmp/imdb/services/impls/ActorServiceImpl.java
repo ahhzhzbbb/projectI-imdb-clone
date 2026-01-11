@@ -61,4 +61,11 @@ public class ActorServiceImpl implements ActorService {
         Actor updatedActor = actorRepository.save(actor);
         return modelMapper.map(updatedActor, ActorDTO.class);
     }
+
+    @Override
+    public ActorDTO getActor(Long actorId) {
+        Actor actor = actorRepository.findById(actorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Actor", "id", actorId));
+        return modelMapper.map(actor, ActorDTO.class);
+    }
 }
