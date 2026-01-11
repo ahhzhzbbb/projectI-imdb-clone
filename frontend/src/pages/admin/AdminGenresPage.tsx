@@ -18,6 +18,7 @@ export const AdminGenresPage: React.FC = () => {
     name: '',
     description: '',
   });
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     loadGenres();
@@ -108,22 +109,31 @@ export const AdminGenresPage: React.FC = () => {
     <MainLayout>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-black text-white">Manage Genres</h1>
-        {!showForm ? (
-          <Button
-            variant="primary"
-            onClick={() => {
-              setShowForm(true);
-              setEditingId(null);
-              setFormData({
-                name: '',
-                description: '',
-              });
-            }}
-          >
-            <Plus size={20} className="mr-2" />
-            Add Genre
-          </Button>
-        ) : null}
+        <div className="flex items-center gap-4">
+          <input
+            type="text"
+            placeholder="Search genres..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded-lg w-64 focus:outline-none focus:border-yellow-500"
+          />
+          {!showForm && (
+            <Button
+              variant="primary"
+              onClick={() => {
+                setShowForm(true);
+                setEditingId(null);
+                setFormData({
+                  name: '',
+                  description: '',
+                });
+              }}
+            >
+              <Plus size={20} className="mr-2" />
+              Add Genre
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Form */}
@@ -172,43 +182,45 @@ export const AdminGenresPage: React.FC = () => {
 
       {/* Genres Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {genres.map((genre) => (
-          <div
-            key={genre.id}
-            className="bg-gray-900 border border-gray-700 rounded-lg p-4 hover:border-gray-600 transition-colors"
-          >
-                <div className="flex justify-between items-start mb-2">
-              <h3 className="text-white font-bold text-lg">
-                {genre.name || genre.genreName}
-              </h3>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    setEditingId(genre.id as any);
-                    setShowForm(true);
-                    setFormData({
-                      name: genre.name || genre.genreName || '',
-                      description: genre.description || '',
-                    });
-                  }}
-                  className="text-blue-500 hover:text-blue-600 p-1"
-                >
-                  <Edit2 size={18} />
-                </button>
-                <button
-                  onClick={() => handleDelete(genre.id)}
-                  className="text-red-500 hover:text-red-600 p-1"
-                >
-                  <Trash2 size={18} />
-                </button>
+        {genres
+          .filter((genre) => (genre.name || genre.genreName || '').toLowerCase().includes(searchTerm.toLowerCase()))
+          .map((genre) => (
+            <div
+              key={genre.id}
+              className="bg-gray-900 border border-gray-700 rounded-lg p-4 hover:border-gray-600 transition-colors"
+            >
+              <div className="flex justify-between items-start mb-2">
+                <h3 className="text-white font-bold text-lg">
+                  {genre.name || genre.genreName}
+                </h3>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      setEditingId(genre.id as any);
+                      setShowForm(true);
+                      setFormData({
+                        name: genre.name || genre.genreName || '',
+                        description: genre.description || '',
+                      });
+                    }}
+                    className="text-blue-500 hover:text-blue-600 p-1"
+                  >
+                    <Edit2 size={18} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(genre.id)}
+                    className="text-red-500 hover:text-red-600 p-1"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
               </div>
+              {/* Description */}
+              {genre.description && (
+                <p className="text-gray-400 text-sm mt-2">{genre.description}</p>
+              )}
             </div>
-            {/* Description */}
-            {genre.description && (
-              <p className="text-gray-400 text-sm mt-2">{genre.description}</p>
-            )}
-          </div>
-        ))}
+          ))}
       </div>
 
       {genres.length === 0 && (

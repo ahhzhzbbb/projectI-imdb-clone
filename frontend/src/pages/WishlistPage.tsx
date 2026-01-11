@@ -60,7 +60,6 @@ export const WishlistPage: React.FC = () => {
           onWishlistClick={handleRemoveClick}
           wishlistIds={wishlist.map((m) => m.id)}
           isLoading={isLoading}
-          cols={5}
         />
       )}
     </MainLayout>

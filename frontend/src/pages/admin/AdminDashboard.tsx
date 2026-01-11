@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MainLayout } from '../../layouts/MainLayout';
-import { Film, Users, User, Settings, Tag, Clapperboard } from 'lucide-react';
+import { Film, Users, User, Settings, Tag } from 'lucide-react';
 
 /**
  * Admin Dashboard - Trang chính của admin panel
@@ -21,13 +21,6 @@ export const AdminDashboard: React.FC = () => {
       icon: Tag,
       link: '/admin/genres',
       color: 'bg-orange-600',
-    },
-    {
-      title: 'Movie Genres',
-      description: 'Attach genres to movies',
-      icon: Clapperboard,
-      link: '/admin/movie-genres',
-      color: 'bg-cyan-600',
     },
     {
       title: 'Actors',

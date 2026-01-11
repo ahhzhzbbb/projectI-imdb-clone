@@ -6,6 +6,9 @@ import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 import { WishlistPage } from './pages/WishlistPage';
 import { MovieDetailPage } from './pages/MovieDetailPage';
+import { ActorDetailPage } from './pages/ActorDetailPage';
+import { SearchPage } from './pages/SearchPage';
+import { GenreDetailPage } from './pages/GenreDetailPage';
 import { GenresPage } from './pages/GenresPage';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { AdminMoviesPage } from './pages/admin/AdminMoviesPage';
@@ -59,7 +62,10 @@ function AppContent() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/movie/:movieId" element={<MovieDetailPage />} />
+        <Route path="/actor/:actorId" element={<ActorDetailPage />} />
+        <Route path="/search" element={<SearchPage />} />
         <Route path="/genres" element={<GenresPage />} />
+        <Route path="/genre/:genreId" element={<GenreDetailPage />} />
 
         {/* Protected Routes */}
         <Route

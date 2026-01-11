@@ -23,24 +23,15 @@ export const AdminMoviesPage: React.FC = () => {
     trailerUrl: '',
     tvSeries: false,
   });
-  const [allGenres, setAllGenres] = useState<IGenre[]>([]);
   const [selectedGenreIds, setSelectedGenreIds] = useState<Array<number | string>>([]);
   const [originalGenreIds, setOriginalGenreIds] = useState<Array<number | string>>([]);
+  const [movieGenres, setMovieGenres] = useState<IGenre[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     loadMovies();
-    loadAllGenres();
   }, []);
 
-  const loadAllGenres = async () => {
-    try {
-      const res = await genreAPI.getAllGenres();
-      const data = res.data.genres || res.data || [];
-      setAllGenres(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error('Failed to load all genres:', err);
-    }
-  };
 
   const loadMovies = async () => {
     setIsLoading(true);
@@ -71,11 +62,17 @@ export const AdminMoviesPage: React.FC = () => {
 
   const handleEditClick = async (movieId: number | string) => {
     try {
-      // Get full movie details to ensure we have trailerUrl
-      const response = await movieAPI.getMovieDetail(movieId);
+      // Get full movie details and genres in parallel
+      const [detailResponse, genresResponse] = await Promise.all([
+        movieAPI.getMovieDetail(movieId),
+        genreAPI.getGenresOfMovie(movieId),
+      ]);
+
       // Handle different response formats
-      const movieDetail = response.data.data || response.data;
+      const movieDetail = detailResponse.data.data || detailResponse.data;
+      const genres = genresResponse.data || [];
       console.log('Loaded movie detail for editing:', movieDetail);
+      console.log('Loaded movie genres:', genres);
 
       if (!movieDetail) {
         throw new Error('No movie data received');
@@ -89,9 +86,10 @@ export const AdminMoviesPage: React.FC = () => {
         trailerUrl: movieDetail.trailerUrl || '',
         tvSeries: movieDetail.tvSeries || false,
       });
-      const existingGenreIds = (movieDetail.genres || []).map((g: any) => g.id);
+      const existingGenreIds = genres.map((g: any) => g.id);
       setSelectedGenreIds(existingGenreIds);
       setOriginalGenreIds(existingGenreIds);
+      setMovieGenres(genres);
       setShowForm(true);
     } catch (error: any) {
       console.error('Failed to load movie details:', error);
@@ -180,27 +178,36 @@ export const AdminMoviesPage: React.FC = () => {
     <MainLayout>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-black text-white">Manage Movies</h1>
-        {!showForm ? (
-          <Button
-            variant="primary"
-            onClick={() => {
-              setShowForm(!showForm);
-              setEditingId(null);
-              setFormData({
-                movieName: '',
-                description: '',
-                imageUrl: '',
-                trailerUrl: '',
-                tvSeries: false,
-              });
-              setSelectedGenreIds([]);
-              setOriginalGenreIds([]);
-            }}
-          >
-            <Plus size={20} className="mr-2" />
-            Add Movie
-          </Button>
-        ) : null}
+        <div className="flex items-center gap-4">
+          <input
+            type="text"
+            placeholder="Search movies..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded-lg w-64 focus:outline-none focus:border-yellow-500"
+          />
+          {!showForm && (
+            <Button
+              variant="primary"
+              onClick={() => {
+                setShowForm(!showForm);
+                setEditingId(null);
+                setFormData({
+                  movieName: '',
+                  description: '',
+                  imageUrl: '',
+                  trailerUrl: '',
+                  tvSeries: false,
+                });
+                setSelectedGenreIds([]);
+                setOriginalGenreIds([]);
+              }}
+            >
+              <Plus size={20} className="mr-2" />
+              Add Movie
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Modal Popup for Form */}
@@ -274,26 +281,29 @@ export const AdminMoviesPage: React.FC = () => {
                 </label>
               </div>
 
-              {/* Genres list (read-only display) */}
-              <div>
-                <label className="text-sm font-semibold text-gray-300 block mb-2">
-                  Genres
-                </label>
-                <div className="flex flex-wrap gap-2 p-3 border border-gray-700 rounded bg-gray-800 min-h-[48px]">
-                  {allGenres.length === 0 ? (
-                    <span className="text-gray-500 text-sm">Không có thể loại nào</span>
-                  ) : (
-                    allGenres.map((g) => (
-                      <span
-                        key={g.id}
-                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-700 text-gray-300 border border-gray-600"
-                      >
-                        {g.name || g.genreName}
-                      </span>
-                    ))
-                  )}
+              {/* Genres list (only show in Edit mode) */}
+              {editingId && (
+                <div>
+                  <label className="text-sm font-semibold text-gray-300 block mb-2">
+                    Genres
+                  </label>
+                  <div className="flex flex-wrap gap-2 p-3 border border-gray-700 rounded bg-gray-800 min-h-[48px]">
+                    {movieGenres.length === 0 ? (
+                      <span className="text-gray-500 text-sm">No genres assigned</span>
+                    ) : (
+                      movieGenres.map((g) => (
+                        <span
+                          key={g.id}
+                          title={g.description || `Genre: ${g.name || g.genreName}`}
+                          className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 cursor-help hover:bg-yellow-500/30 transition-colors"
+                        >
+                          {g.name || g.genreName}
+                        </span>
+                      ))
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="flex gap-3 items-center">
                 <Button variant="primary" type="submit">
@@ -349,40 +359,42 @@ export const AdminMoviesPage: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {movies.map((movie) => (
-              <tr key={movie.id} className="border-b border-gray-700 hover:bg-gray-800">
-                <td className="p-4 text-white">{movie.name}</td>
-                <td className="p-4">
-                  {movie.tvSeries ? (
-                    <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded">
-                      TV Series
-                    </span>
-                  ) : (
-                    <span className="bg-green-600 text-white text-xs px-2 py-1 rounded">
-                      Movie
-                    </span>
-                  )}
-                </td>
-                <td className="p-4 text-yellow-500 font-semibold">
-                  {movie.averageScore.toFixed(1)}/10
-                </td>
-                <td className="p-4 text-gray-400">{movie.reviewCount}</td>
-                <td className="p-4 text-center">
-                  <button
-                    onClick={() => handleEditClick(movie.id)}
-                    className="text-blue-500 hover:text-blue-600 mr-3 inline-block"
-                  >
-                    <Edit2 size={20} />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(movie.id)}
-                    className="text-red-500 hover:text-red-600 inline-block"
-                  >
-                    <Trash2 size={20} />
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {movies
+              .filter((movie) => movie.name.toLowerCase().includes(searchTerm.toLowerCase()))
+              .map((movie) => (
+                <tr key={movie.id} className="border-b border-gray-700 hover:bg-gray-800">
+                  <td className="p-4 text-white">{movie.name}</td>
+                  <td className="p-4">
+                    {movie.tvSeries ? (
+                      <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded">
+                        TV Series
+                      </span>
+                    ) : (
+                      <span className="bg-green-600 text-white text-xs px-2 py-1 rounded">
+                        Movie
+                      </span>
+                    )}
+                  </td>
+                  <td className="p-4 text-yellow-500 font-semibold">
+                    {movie.averageScore.toFixed(1)}/10
+                  </td>
+                  <td className="p-4 text-gray-400">{movie.reviewCount}</td>
+                  <td className="p-4 text-center">
+                    <button
+                      onClick={() => handleEditClick(movie.id)}
+                      className="text-blue-500 hover:text-blue-600 mr-3 inline-block"
+                    >
+                      <Edit2 size={20} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(movie.id)}
+                      className="text-red-500 hover:text-red-600 inline-block"
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
 

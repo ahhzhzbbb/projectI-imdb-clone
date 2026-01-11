@@ -194,9 +194,18 @@ export const AdminMovieGenresPage: React.FC = () => {
 
         {/* All genres with Add/Remove toggle */}
         <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
-          <h2 className="text-xl font-bold text-white mb-4">All Genres</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-white">All Genres</h2>
+            <input
+              type="text"
+              placeholder="Search genres..."
+              value={genreQuery}
+              onChange={(e) => setGenreQuery(e.target.value)}
+              className="bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded-lg w-64 focus:outline-none focus:border-yellow-500"
+            />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {allGenres.map((g) => {
+            {filteredGenres.map((g) => {
               const isAttached = selectedGenreIds.includes(g.id);
               return (
                 <div
@@ -226,6 +235,11 @@ export const AdminMovieGenresPage: React.FC = () => {
                 </div>
               );
             })}
+            {filteredGenres.length === 0 && (
+              <div className="col-span-full text-center text-gray-500 py-8">
+                No genres found matching "{genreQuery}"
+              </div>
+            )}
           </div>
         </div>
       </MainLayout>

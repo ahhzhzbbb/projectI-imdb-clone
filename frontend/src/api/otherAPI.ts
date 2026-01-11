@@ -7,7 +7,7 @@ export const actorAPI = {
     apiClient.get<IActorResponse>('/actors'),
 
   getActor: (actorId: number | string) =>
-    apiClient.get<IActor>(`/actors/${actorId}`),
+    apiClient.get<IActor>(`/actor/${actorId}`),
 
   createActor: (data: Partial<IActor>) =>
     apiClient.post<IActor>('/actor', data),

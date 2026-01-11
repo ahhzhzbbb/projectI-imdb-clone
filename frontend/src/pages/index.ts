@@ -3,6 +3,9 @@ export { LoginPage } from './LoginPage';
 export { SignupPage } from './SignupPage';
 export { WishlistPage } from './WishlistPage';
 export { MovieDetailPage } from './MovieDetailPage';
+export { ActorDetailPage } from './ActorDetailPage';
+export { SearchPage } from './SearchPage';
+export { GenreDetailPage } from './GenreDetailPage';
 
 // Admin Pages
 export { AdminDashboard } from './admin/AdminDashboard';

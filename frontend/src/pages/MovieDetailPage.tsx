@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { MainLayout } from '../layouts/MainLayout';
 import { Button } from '../components/common/Button';
 import type { IMovieDetail, IReview, IMovie, IActor } from '../types';
-import { movieAPI, reviewAPI, movieActorAPI } from '../api';
+import { movieAPI, reviewAPI, movieActorAPI, genreAPI } from '../api';
 import { useAuth } from '../store/AuthContext';
 import { useWishlist } from '../hooks/useWishlist';
 import { Plus, Trash2, Play, Film, Image, Star, Eye } from 'lucide-react';
@@ -48,10 +48,21 @@ export const MovieDetailPage: React.FC = () => {
   const loadMovieDetail = async () => {
     setIsLoading(true);
     try {
-      const response = await movieAPI.getMovieDetail(movieId!);
-      const movieData = response.data.data || response.data;
+      // Fetch movie detail and genres in parallel
+      const [detailResponse, genresResponse] = await Promise.all([
+        movieAPI.getMovieDetail(movieId!),
+        genreAPI.getGenresOfMovie(movieId!),
+      ]);
+
+      const movieData = detailResponse.data.data || detailResponse.data;
+      const genresData = genresResponse.data || [];
+
       if (movieData) {
-        setMovie(movieData);
+        // Merge genres into movie data
+        setMovie({
+          ...movieData,
+          genres: genresData
+        });
         setError(null);
       } else {
         setError('No movie data received');
@@ -325,9 +336,13 @@ export const MovieDetailPage: React.FC = () => {
             {movie.genres && movie.genres.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-6">
                 {movie.genres.map((genre) => (
-                  <span key={genre.id} className="px-4 py-1.5 text-sm text-white border border-gray-600 rounded-full hover:bg-gray-800 cursor-pointer transition-colors">
+                  <Link
+                    key={genre.id}
+                    to={`/genre/${genre.id}`}
+                    className="px-4 py-1.5 text-sm text-white border border-gray-600 rounded-full hover:bg-gray-800 hover:border-yellow-500 hover:text-yellow-500 cursor-pointer transition-colors"
+                  >
                     {genre.genreName || genre.name}
-                  </span>
+                  </Link>
                 ))}
               </div>
             )}
@@ -355,7 +370,7 @@ export const MovieDetailPage: React.FC = () => {
                 <div className="flex items-center gap-2">
                   {actors.slice(0, 3).map((actor, idx) => (
                     <React.Fragment key={actor.id}>
-                      <a href="#" className="text-blue-400 hover:underline">{actor.name}</a>
+                      <span onClick={() => navigate(`/actor/${actor.id}`)} className="text-blue-400 hover:underline cursor-pointer">{actor.name}</span>
                       {idx < Math.min(actors.length - 1, 2) && <span className="text-gray-600">•</span>}
                     </React.Fragment>
                   ))}
@@ -450,7 +465,7 @@ export const MovieDetailPage: React.FC = () => {
                             )}
                           </div>
                           <div className="flex-1">
-                            <h4 className="text-white font-semibold hover:text-blue-400 cursor-pointer">{actor.name}</h4>
+                            <h4 onClick={() => navigate(`/actor/${actor.id}`)} className="text-white font-semibold hover:text-blue-400 cursor-pointer">{actor.name}</h4>
                             {actor.introduction && (
                               <p className="text-gray-400 text-sm mt-1 line-clamp-2">{actor.introduction}</p>
                             )}
