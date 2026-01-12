@@ -10,6 +10,7 @@ public class EpisodeDTO {
     private Long id;
     private Integer episodeNumber;
     private String title;
+    private String summary;
     private String posterURL;
     private String trailerURL;
     private Double averageScore;
