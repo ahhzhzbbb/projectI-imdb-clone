@@ -413,12 +413,27 @@ export const MovieDetailPage: React.FC = () => {
                       {/* Episodes List */}
                       <div className="space-y-4">
                         {currentSeason?.episodes?.map((episode) => (
-                          <div key={episode.id} className="flex gap-4 p-4 bg-gray-900/30 rounded-lg hover:bg-gray-900/50 transition-colors border border-gray-800">
+                          <div
+                            key={episode.id}
+                            onClick={() => {
+                              // Store episode data in sessionStorage for EpisodeDetailPage
+                              sessionStorage.setItem(`episode_${episode.id}`, JSON.stringify(episode));
+                              navigate(`/episode/${episode.id}`);
+                            }}
+                            className="flex gap-4 p-4 bg-gray-900/30 rounded-lg hover:bg-gray-900/50 transition-colors border border-gray-800 cursor-pointer hover:border-yellow-500/50"
+                          >
                             <div className="w-40 h-24 bg-gray-800 rounded overflow-hidden flex-shrink-0 relative">
-                              <div className="w-full h-full flex items-center justify-center text-gray-600">
-                                <Film size={24} />
-                              </div>
-                              <button className="absolute top-1 left-1 w-6 h-6 bg-black/60 rounded flex items-center justify-center">
+                              {episode.posterURL ? (
+                                <img src={episode.posterURL} alt={episode.title} className="w-full h-full object-cover" />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-gray-600">
+                                  <Film size={24} />
+                                </div>
+                              )}
+                              <button
+                                onClick={(e) => e.stopPropagation()}
+                                className="absolute top-1 left-1 w-6 h-6 bg-black/60 rounded flex items-center justify-center"
+                              >
                                 <Plus className="w-4 h-4 text-white" />
                               </button>
                             </div>

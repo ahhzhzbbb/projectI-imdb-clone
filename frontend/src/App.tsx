@@ -10,6 +10,7 @@ import { ActorDetailPage } from './pages/ActorDetailPage';
 import { SearchPage } from './pages/SearchPage';
 import { GenreDetailPage } from './pages/GenreDetailPage';
 import { GenresPage } from './pages/GenresPage';
+import { EpisodeDetailPage } from './pages/EpisodeDetailPage';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { AdminMoviesPage } from './pages/admin/AdminMoviesPage';
 import { AdminActorsPage } from './pages/admin/AdminActorsPage';
@@ -18,6 +19,7 @@ import { AdminGenresPage } from './pages/admin/AdminGenresPage';
 import { AdminMovieGenresPage } from './pages/admin/AdminMovieGenresPage';
 import { AdminMovieActorsPage } from './pages/admin/AdminMovieActorsPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
+import { AdminEpisodesPage } from './pages/admin/AdminEpisodesPage';
 import './styles/globals.css';
 
 // Protected Route Component
@@ -66,6 +68,7 @@ function AppContent() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/genres" element={<GenresPage />} />
         <Route path="/genre/:genreId" element={<GenreDetailPage />} />
+        <Route path="/episode/:episodeId" element={<EpisodeDetailPage />} />
 
         {/* Protected Routes */}
         <Route
@@ -139,6 +142,14 @@ function AppContent() {
           element={
             <ProtectedRoute requiredRole="ADMIN">
               <AdminMovieActorsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/episodes"
+          element={
+            <ProtectedRoute requiredRole="ADMIN">
+              <AdminEpisodesPage />
             </ProtectedRoute>
           }
         />

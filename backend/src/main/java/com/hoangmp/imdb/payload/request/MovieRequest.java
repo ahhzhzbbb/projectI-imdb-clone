@@ -10,4 +10,5 @@ public class MovieRequest {
     private String imageUrl;
     private String trailerUrl;
     private Boolean tvSeries;
+    private Long directorId;
 }

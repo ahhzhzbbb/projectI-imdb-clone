@@ -5,7 +5,7 @@ import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
 import type { IActor, IMovie } from '../../types';
 import { actorAPI, movieActorAPI } from '../../api';
-import { Edit2, Trash2, Plus, X, Star, Film } from 'lucide-react';
+import { Edit2, Trash2, Plus, X, Star, Film, ArrowLeft } from 'lucide-react';
 
 /**
  * Admin Actors Management
@@ -119,6 +119,15 @@ export const AdminActorsPage: React.FC = () => {
 
   return (
     <MainLayout>
+      {/* Back Button */}
+      <button
+        onClick={() => navigate('/admin')}
+        className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors"
+      >
+        <ArrowLeft size={20} />
+        <span>Back to Dashboard</span>
+      </button>
+
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-black text-white">Manage Actors</h1>
         <div className="flex items-center gap-4">

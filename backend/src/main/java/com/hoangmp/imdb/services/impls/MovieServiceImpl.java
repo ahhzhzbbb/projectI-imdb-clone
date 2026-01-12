@@ -7,6 +7,7 @@ import com.hoangmp.imdb.payload.dto.MovieDTO;
 import com.hoangmp.imdb.payload.dto.MovieDetailDTO;
 import com.hoangmp.imdb.payload.request.MovieRequest;
 import com.hoangmp.imdb.payload.response.MovieResponse;
+import com.hoangmp.imdb.repositories.DirectorRepository;
 import com.hoangmp.imdb.repositories.MovieRepository;
 import com.hoangmp.imdb.services.MovieService;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +24,19 @@ public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
 
+    private final DirectorRepository directorRepository;
+
     @Transactional
     @Override
     public MovieDTO createMovie(MovieRequest movieRequest) {
         Movie newMovie = new Movie();
         modelMapper.map(movieRequest, newMovie);
+
+        // Set director if provided
+        if (movieRequest.getDirectorId() != null) {
+            directorRepository.findById(movieRequest.getDirectorId())
+                    .ifPresent(newMovie::setDirector);
+        }
 
         Season season1 = new Season(1);
         season1.setMovie(newMovie);
@@ -41,7 +50,8 @@ public class MovieServiceImpl implements MovieService {
     public MovieResponse getAllMovies() {
         List<Movie> movies = movieRepository.findAll();
         List<MovieDTO> movieList = movies.stream()
-                .map(movie -> new MovieDTO(movie.getId(), movie.getName(), movie.getDescription(), movie.getImageUrl(), movie.getTvSeries(), movie.getAverageScore(), movie.getReviewCount()))
+                .map(movie -> new MovieDTO(movie.getId(), movie.getName(), movie.getDescription(), movie.getImageUrl(),
+                        movie.getTvSeries(), movie.getAverageScore(), movie.getReviewCount()))
                 .toList();
         MovieResponse movieResponse = new MovieResponse();
         movieResponse.setMovies(movieList);
@@ -51,9 +61,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieDetailDTO getMovieDetail(Long movieId) {
         Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Movie", "id", movieId)
-                );
+                .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", movieId));
         return modelMapper.map(movie, MovieDetailDTO.class);
     }
 
@@ -62,9 +70,7 @@ public class MovieServiceImpl implements MovieService {
     public MovieDTO deleteMovie(Long movieId) {
 
         Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Movie", "id", movieId)
-                );
+                .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", movieId));
 
         movieRepository.delete(movie);
 
@@ -75,9 +81,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieDTO updateMovie(Long movieId, MovieRequest movieRequest) {
         Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Movie", "id", movieId)
-                );
+                .orElseThrow(() -> new ResourceNotFoundException("Movie", "id", movieId));
 
         // Update only non-null fields
         if (movieRequest.getMovieName() != null && !movieRequest.getMovieName().isEmpty()) {
@@ -94,6 +98,11 @@ public class MovieServiceImpl implements MovieService {
         }
         if (movieRequest.getTvSeries() != null) {
             movie.setTvSeries(movieRequest.getTvSeries());
+        }
+        // Update director if provided
+        if (movieRequest.getDirectorId() != null) {
+            directorRepository.findById(movieRequest.getDirectorId())
+                    .ifPresent(movie::setDirector);
         }
 
         movieRepository.save(movie);

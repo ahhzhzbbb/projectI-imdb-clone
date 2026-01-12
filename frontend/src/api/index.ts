@@ -3,4 +3,5 @@ export { authAPI } from './authAPI';
 export { reviewAPI, ratingAPI } from './reviewAPI';
 export { wishlistAPI } from './wishlistAPI';
 export { actorAPI, directorAPI, genreAPI, movieActorAPI } from './otherAPI';
+export { seasonAPI, episodeAPI } from './seasonEpisodeAPI';
 export { default as apiClient } from './axiosConfig';

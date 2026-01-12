@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MainLayout } from '../../layouts/MainLayout';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
 import type { IGenre } from '../../types';
 import { genreAPI } from '../../api';
-import { Edit2, Trash2, Plus } from 'lucide-react';
+import { Edit2, Trash2, Plus, ArrowLeft } from 'lucide-react';
 
 /**
  * Admin Genres Management
  */
 export const AdminGenresPage: React.FC = () => {
+  const navigate = useNavigate();
   const [genres, setGenres] = useState<IGenre[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -60,7 +62,7 @@ export const AdminGenresPage: React.FC = () => {
       };
 
       if (editingId) {
-        // Backend không hỗ trợ update, chỉ có delete + create
+        // Backend doesn't support update, only delete + create
         alert('Update feature not supported. Please delete and create a new genre.');
       } else {
         // Create new genre
@@ -107,6 +109,15 @@ export const AdminGenresPage: React.FC = () => {
 
   return (
     <MainLayout>
+      {/* Back Button */}
+      <button
+        onClick={() => navigate('/admin')}
+        className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors"
+      >
+        <ArrowLeft size={20} />
+        <span>Back to Dashboard</span>
+      </button>
+
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-black text-white">Manage Genres</h1>
         <div className="flex items-center gap-4">
@@ -136,47 +147,64 @@ export const AdminGenresPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Form */}
+      {/* Modal Popup for Form */}
       {showForm && (
-        <div className="bg-gray-900 border border-gray-700 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-white mb-4">
-            {editingId ? 'Edit Genre' : 'Add New Genre'}
-          </h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              label="Genre Name"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              required
-            />
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Overlay */}
+          <div
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={() => setShowForm(false)}
+          />
 
-            <div>
-              <label className="text-sm font-semibold text-gray-300 block mb-2">
-                Description (Optional)
-              </label>
-              <textarea
-                name="description"
-                value={formData.description}
+          {/* Modal Content */}
+          <div className="relative bg-gray-900 border border-gray-700 rounded-lg p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl mx-4">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowForm(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors text-xl"
+            >
+              ✕
+            </button>
+
+            <h2 className="text-xl font-bold text-white mb-4">
+              {editingId ? 'Edit Genre' : 'Add New Genre'}
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <Input
+                label="Genre Name"
+                name="name"
+                value={formData.name}
                 onChange={handleInputChange}
-                placeholder="Enter genre description..."
-                className="w-full bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded h-24 focus:outline-none focus:border-yellow-500"
+                required
               />
-            </div>
 
-            <div className="flex gap-3">
-              <Button variant="primary" type="submit">
-                {editingId ? 'Update' : 'Create'} Genre
-              </Button>
-              <Button
-                variant="secondary"
-                type="button"
-                onClick={() => setShowForm(false)}
-              >
-                Cancel
-              </Button>
-            </div>
-          </form>
+              <div>
+                <label className="text-sm font-semibold text-gray-300 block mb-2">
+                  Description (Optional)
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  placeholder="Enter genre description..."
+                  className="w-full bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded h-24 focus:outline-none focus:border-yellow-500"
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <Button variant="primary" type="submit">
+                  {editingId ? 'Update' : 'Create'} Genre
+                </Button>
+                <Button
+                  variant="secondary"
+                  type="button"
+                  onClick={() => setShowForm(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 

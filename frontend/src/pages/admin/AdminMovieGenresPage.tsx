@@ -1,15 +1,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MainLayout } from '../../layouts/MainLayout';
 import { Button } from '../../components/common/Button';
 import type { IMovie, IGenre } from '../../types';
 import { movieAPI, genreAPI } from '../../api';
-import { Search as SearchIcon } from 'lucide-react';
+import { Search as SearchIcon, ArrowLeft } from 'lucide-react';
 
 /**
  * Admin: assign/unassign genres to a movie
  */
 export const AdminMovieGenresPage: React.FC = () => {
+  const navigate = useNavigate();
   const [movies, setMovies] = useState<IMovie[]>([]);
   const [allGenres, setAllGenres] = useState<IGenre[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -248,6 +249,15 @@ export const AdminMovieGenresPage: React.FC = () => {
 
   return (
     <MainLayout>
+      {/* Back Button */}
+      <button
+        onClick={() => navigate('/admin')}
+        className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors"
+      >
+        <ArrowLeft size={20} />
+        <span>Back to Dashboard</span>
+      </button>
+
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-black text-white">Assign Genres to Movie</h1>
       </div>

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { MainLayout } from '../../layouts/MainLayout';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
-import type { IMovie, IGenre } from '../../types';
-import { movieAPI, genreAPI } from '../../api';
-import { Edit2, Trash2, Plus } from 'lucide-react';
+import type { IMovie, IGenre, IDirector } from '../../types';
+import { movieAPI, genreAPI, directorAPI } from '../../api';
+import { Edit2, Trash2, Plus, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 /**
@@ -22,15 +22,31 @@ export const AdminMoviesPage: React.FC = () => {
     imageUrl: '',
     trailerUrl: '',
     tvSeries: false,
+    directorId: '' as string | number,
   });
   const [selectedGenreIds, setSelectedGenreIds] = useState<Array<number | string>>([]);
   const [originalGenreIds, setOriginalGenreIds] = useState<Array<number | string>>([]);
   const [movieGenres, setMovieGenres] = useState<IGenre[]>([]);
+  const [directors, setDirectors] = useState<IDirector[]>([]);
+  const [directorSearch, setDirectorSearch] = useState('');
+  const [selectedDirectorName, setSelectedDirectorName] = useState('');
+  const [showDirectorDropdown, setShowDirectorDropdown] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     loadMovies();
+    loadDirectors();
   }, []);
+
+  const loadDirectors = async () => {
+    try {
+      const response = await directorAPI.getAllDirectors();
+      const directorsData = response.data.directors || response.data || [];
+      setDirectors(Array.isArray(directorsData) ? directorsData : []);
+    } catch (error) {
+      console.error('Failed to load directors:', error);
+    }
+  };
 
 
   const loadMovies = async () => {
@@ -85,7 +101,11 @@ export const AdminMoviesPage: React.FC = () => {
         imageUrl: movieDetail.imageUrl || '',
         trailerUrl: movieDetail.trailerUrl || '',
         tvSeries: movieDetail.tvSeries || false,
+        directorId: movieDetail.director?.id || '',
       });
+      // Set director name for searchable input
+      setSelectedDirectorName(movieDetail.director?.name || '');
+      setDirectorSearch('');
       const existingGenreIds = genres.map((g: any) => g.id);
       setSelectedGenreIds(existingGenreIds);
       setOriginalGenreIds(existingGenreIds);
@@ -106,6 +126,7 @@ export const AdminMoviesPage: React.FC = () => {
         imageUrl: formData.imageUrl,
         trailerUrl: formData.trailerUrl,
         tvSeries: formData.tvSeries,
+        directorId: formData.directorId ? Number(formData.directorId) : null,
       };
 
       let resultingMovieId: number | string | null = null;
@@ -143,9 +164,12 @@ export const AdminMoviesPage: React.FC = () => {
         imageUrl: '',
         trailerUrl: '',
         tvSeries: false,
+        directorId: '',
       });
       setSelectedGenreIds([]);
       setOriginalGenreIds([]);
+      setSelectedDirectorName('');
+      setDirectorSearch('');
       setEditingId(null);
     } catch (error: any) {
       console.error('Failed to save movie:', error);
@@ -176,6 +200,15 @@ export const AdminMoviesPage: React.FC = () => {
 
   return (
     <MainLayout>
+      {/* Back Button */}
+      <button
+        onClick={() => navigate('/admin')}
+        className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors"
+      >
+        <ArrowLeft size={20} />
+        <span>Back to Dashboard</span>
+      </button>
+
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-black text-white">Manage Movies</h1>
         <div className="flex items-center gap-4">
@@ -198,9 +231,12 @@ export const AdminMoviesPage: React.FC = () => {
                   imageUrl: '',
                   trailerUrl: '',
                   tvSeries: false,
+                  directorId: '',
                 });
                 setSelectedGenreIds([]);
                 setOriginalGenreIds([]);
+                setSelectedDirectorName('');
+                setDirectorSearch('');
               }}
             >
               <Plus size={20} className="mr-2" />
@@ -279,6 +315,68 @@ export const AdminMoviesPage: React.FC = () => {
                 <label htmlFor="tvSeries" className="text-gray-300">
                   This is a TV Series
                 </label>
+              </div>
+
+              {/* Director searchable input */}
+              <div className="relative">
+                <label className="text-sm font-semibold text-gray-300 block mb-2">
+                  Director
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search director..."
+                    value={directorSearch || selectedDirectorName}
+                    onChange={(e) => {
+                      setDirectorSearch(e.target.value);
+                      setShowDirectorDropdown(true);
+                      // Clear selection if user types
+                      if (formData.directorId) {
+                        setFormData(prev => ({ ...prev, directorId: '' }));
+                        setSelectedDirectorName('');
+                      }
+                    }}
+                    onFocus={() => setShowDirectorDropdown(true)}
+                    className="w-full bg-gray-800 border border-gray-700 text-white px-3 py-2 rounded focus:outline-none focus:border-yellow-500"
+                  />
+                  {formData.directorId && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormData(prev => ({ ...prev, directorId: '' }));
+                        setSelectedDirectorName('');
+                        setDirectorSearch('');
+                      }}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-400"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+                {showDirectorDropdown && (
+                  <div className="absolute z-10 w-full mt-1 bg-gray-800 border border-gray-700 rounded-lg max-h-48 overflow-y-auto shadow-xl">
+                    {directors
+                      .filter(d => d.name.toLowerCase().includes((directorSearch || '').toLowerCase()))
+                      .slice(0, 10)
+                      .map((director) => (
+                        <div
+                          key={director.id}
+                          onClick={() => {
+                            setFormData(prev => ({ ...prev, directorId: director.id }));
+                            setSelectedDirectorName(director.name);
+                            setDirectorSearch('');
+                            setShowDirectorDropdown(false);
+                          }}
+                          className="px-3 py-2 hover:bg-gray-700 cursor-pointer text-white"
+                        >
+                          {director.name}
+                        </div>
+                      ))}
+                    {directors.filter(d => d.name.toLowerCase().includes((directorSearch || '').toLowerCase())).length === 0 && (
+                      <div className="px-3 py-2 text-gray-500">No directors found</div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Genres list (only show in Edit mode) */}

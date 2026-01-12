@@ -89,7 +89,7 @@ export interface IEpisode {
   posterURL?: string;
   trailerURL?: string;
   averageScore: number;
-  ratingCount: number;
+  reviewCount: number;
 }
 
 // Rating & Review Types
@@ -161,7 +161,7 @@ export interface IReviewRequest {
 
 export interface IRatingRequest {
   score: number;
-  episodeId: Long;
+  episodeId?: Long;
 }
 
 export interface IGenreRequest {
@@ -175,6 +175,10 @@ export interface IGenreResponse {
 
 export interface IActorResponse {
   actors: IActor[];
+}
+
+export interface IDirectorResponse {
+  directors: IDirector[];
 }
 
 export interface IMovieGenreDTO {

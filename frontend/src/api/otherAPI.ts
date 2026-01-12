@@ -1,4 +1,4 @@
-import type { IActor, IActorResponse, IDirector, IGenre, IGenreRequest, IGenreResponse, IMovieGenreDTO } from '../types';
+import type { IActor, IActorResponse, IDirector, IDirectorResponse, IGenre, IGenreRequest, IGenreResponse, IMovieGenreDTO } from '../types';
 import apiClient from './axiosConfig';
 
 // Actor API Endpoints
@@ -22,19 +22,19 @@ export const actorAPI = {
 // Director API Endpoints
 export const directorAPI = {
   getAllDirectors: () =>
-    apiClient.get<IDirector[]>('/directors'),
+    apiClient.get<IDirectorResponse>('/directors'),
 
   getDirector: (directorId: number | string) =>
-    apiClient.get<IDirector>(`/directors/${directorId}`),
+    apiClient.get<IDirector>(`/director/${directorId}`),
 
   createDirector: (data: Partial<IDirector>) =>
-    apiClient.post<IDirector>('/directors', data),
+    apiClient.post<IDirector>('/director', data),
 
   updateDirector: (directorId: number | string, data: Partial<IDirector>) =>
-    apiClient.put<IDirector>(`/directors/${directorId}`, data),
+    apiClient.put<IDirector>(`/director/${directorId}`, data),
 
   deleteDirector: (directorId: number | string) =>
-    apiClient.delete<IDirector>(`/directors/${directorId}`),
+    apiClient.delete<IDirector>(`/director/${directorId}`),
 };
 
 // Genre API Endpoints (matching backend GenreController and MovieGenreController)

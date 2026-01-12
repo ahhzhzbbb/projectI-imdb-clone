@@ -1,16 +1,17 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MainLayout } from '../../layouts/MainLayout';
 import { Button } from '../../components/common/Button';
 import { movieAPI, actorAPI, movieActorAPI } from '../../api';
 import type { IMovie, IActor } from '../../types';
-import { Search as SearchIcon, Plus, X } from 'lucide-react';
+import { Search as SearchIcon, Plus, X, ArrowLeft } from 'lucide-react';
 
 /**
  * Admin Page to manage Actors attached to Movies
  * Access via /admin/movie-actors?movieId=X for simplified view
  */
 export const AdminMovieActorsPage: React.FC = () => {
+    const navigate = useNavigate();
     const [movies, setMovies] = useState<IMovie[]>([]);
     const [allActors, setAllActors] = useState<IActor[]>([]);
     const [selectedMovie, setSelectedMovie] = useState<IMovie | null>(null);
@@ -140,8 +141,8 @@ export const AdminMovieActorsPage: React.FC = () => {
                                 <div
                                     key={actor.id}
                                     className={`p-3 rounded border-2 flex items-center gap-3 transition-all ${isAttached
-                                            ? 'bg-blue-900/40 border-blue-500'
-                                            : 'bg-gray-800 border-gray-700 hover:border-gray-600'
+                                        ? 'bg-blue-900/40 border-blue-500'
+                                        : 'bg-gray-800 border-gray-700 hover:border-gray-600'
                                         }`}
                                 >
                                     {/* Actor Avatar */}
@@ -185,6 +186,15 @@ export const AdminMovieActorsPage: React.FC = () => {
     // Full page mode - select a movie first
     return (
         <MainLayout>
+            {/* Back Button */}
+            <button
+                onClick={() => navigate('/admin')}
+                className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors"
+            >
+                <ArrowLeft size={20} />
+                <span>Back to Dashboard</span>
+            </button>
+
             <div className="mb-6 flex items-center justify-between">
                 <h1 className="text-3xl font-black text-white">Manage Movie Actors</h1>
             </div>

@@ -32,17 +32,17 @@ export const reviewAPI = {
 
 // Rating API Endpoints
 export const ratingAPI = {
-  // Tạo/cập nhật rating cho episode
-  rateEpisode: (data: IRatingRequest) =>
-    apiClient.post<IRating>('/ratings', data),
+  // Tạo rating cho episode
+  rateEpisode: (episodeId: number | string, data: IRatingRequest) =>
+    apiClient.post<IRating>(`/episode/${episodeId}/rating`, data),
 
-  // Lấy rating của user cho episode
-  getUserEpisodeRating: (episodeId: number | string) =>
-    apiClient.get<IRating>(`/ratings/episode/${episodeId}`),
+  // Cập nhật rating cho episode
+  updateRating: (episodeId: number | string, data: IRatingRequest) =>
+    apiClient.put<IRating>(`/episode/${episodeId}/rating`, data),
 
   // Xóa rating
-  deleteRating: (ratingId: number | string) =>
-    apiClient.delete<IRating>(`/ratings/${ratingId}`),
+  deleteRating: (episodeId: number | string) =>
+    apiClient.delete<IRating>(`/episode/${episodeId}/rating`),
 
   // Lấy tất cả rating của user
   getUserRatings: () =>

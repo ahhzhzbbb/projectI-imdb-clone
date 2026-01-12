@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MainLayout } from '../../layouts/MainLayout';
 import { Button } from '../../components/common/Button';
-import { Save, RotateCcw, Trash2, Check } from 'lucide-react';
+import { Save, RotateCcw, Trash2, Check, ArrowLeft } from 'lucide-react';
 
 // Default settings
 const DEFAULT_SETTINGS = {
@@ -32,6 +33,7 @@ export const getAppSettings = () => {
  * Admin Settings Page
  */
 export const AdminSettingsPage: React.FC = () => {
+  const navigate = useNavigate();
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [saved, setSaved] = useState(false);
 
@@ -74,6 +76,15 @@ export const AdminSettingsPage: React.FC = () => {
 
   return (
     <MainLayout>
+      {/* Back Button */}
+      <button
+        onClick={() => navigate('/admin')}
+        className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition-colors"
+      >
+        <ArrowLeft size={20} />
+        <span>Back to Dashboard</span>
+      </button>
+
       <div className="mb-8">
         <h1 className="text-3xl font-black text-white">Settings</h1>
         <p className="text-gray-400 mt-2">Manage system settings</p>
