@@ -29,7 +29,7 @@ export const EpisodeDetailPage: React.FC = () => {
         if (episodeId) {
             loadEpisodeDetail();
         }
-    }, [episodeId]);
+    }, [episodeId, isAuthenticated]);
 
     const loadEpisodeDetail = async () => {
         setIsLoading(true);
@@ -41,6 +41,24 @@ export const EpisodeDetailPage: React.FC = () => {
                 setEpisode(JSON.parse(storedEpisode));
             } else {
                 setError('Episode data not found. Please go back and try again.');
+            }
+
+            // Check if user already has a rating for this episode
+            if (isAuthenticated && episodeId) {
+                try {
+                    const ratingResponse = await ratingAPI.getUserRatingForEpisode(episodeId);
+                    if (ratingResponse.status === 200 && ratingResponse.data) {
+                        setUserRating(ratingResponse.data.score);
+                        setHasRated(true);
+                    }
+                } catch (ratingErr: any) {
+                    // 404 means no rating exists - this is expected
+                    if (ratingErr.response?.status === 404) {
+                        console.log('No existing rating found for this episode');
+                    }
+                    setUserRating(null);
+                    setHasRated(false);
+                }
             }
         } catch (err: any) {
             console.error('Failed to load episode:', err);
@@ -216,7 +234,7 @@ export const EpisodeDetailPage: React.FC = () => {
                                     <div className="flex items-center justify-center gap-2 mb-2">
                                         <Users className="w-6 h-6 text-blue-400" />
                                         <span className="text-4xl font-black text-white">
-                                            {(episode.reviewCount ?? 0).toLocaleString()}
+                                            {(episode.ratingCount ?? 0).toLocaleString()}
                                         </span>
                                     </div>
                                     <p className="text-gray-400 text-sm">Total Ratings</p>

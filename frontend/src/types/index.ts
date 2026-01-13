@@ -89,7 +89,7 @@ export interface IEpisode {
   posterURL?: string;
   trailerURL?: string;
   averageScore: number;
-  reviewCount: number;
+  ratingCount: number;
 }
 
 // Rating & Review Types

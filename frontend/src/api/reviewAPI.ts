@@ -44,6 +44,10 @@ export const ratingAPI = {
   deleteRating: (episodeId: number | string) =>
     apiClient.delete<IRating>(`/episode/${episodeId}/rating`),
 
+  // Lấy rating của user cho episode
+  getUserRatingForEpisode: (episodeId: number | string) =>
+    apiClient.get<IRating>(`/episode/${episodeId}/rating`),
+
   // Lấy tất cả rating của user
   getUserRatings: () =>
     apiClient.get<IRating[]>('/ratings/user'),

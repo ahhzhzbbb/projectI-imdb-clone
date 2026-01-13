@@ -441,7 +441,7 @@ export const AdminEpisodesPage: React.FC = () => {
                                             )}
                                             <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
                                                 <span>⭐ {(episode.averageScore ?? 0).toFixed(1)}/10</span>
-                                                <span>{episode.reviewCount ?? 0} ratings</span>
+                                                <span>{episode.ratingCount ?? 0} ratings</span>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2">

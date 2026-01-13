@@ -21,6 +21,7 @@ export const AdminGenresPage: React.FC = () => {
     description: '',
   });
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'none'>('none');
 
   useEffect(() => {
     loadGenres();
@@ -128,6 +129,15 @@ export const AdminGenresPage: React.FC = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded-lg w-64 focus:outline-none focus:border-yellow-500"
           />
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc' | 'none')}
+            className="bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:border-yellow-500"
+          >
+            <option value="none">Sort by</option>
+            <option value="asc">Name A-Z</option>
+            <option value="desc">Name Z-A</option>
+          </select>
           {!showForm && (
             <Button
               variant="primary"
@@ -212,6 +222,13 @@ export const AdminGenresPage: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {genres
           .filter((genre) => (genre.name || genre.genreName || '').toLowerCase().includes(searchTerm.toLowerCase()))
+          .sort((a, b) => {
+            const nameA = (a.name || a.genreName || '').toLowerCase();
+            const nameB = (b.name || b.genreName || '').toLowerCase();
+            if (sortOrder === 'asc') return nameA.localeCompare(nameB);
+            if (sortOrder === 'desc') return nameB.localeCompare(nameA);
+            return 0;
+          })
           .map((genre) => (
             <div
               key={genre.id}

@@ -11,6 +11,7 @@ import { SearchPage } from './pages/SearchPage';
 import { GenreDetailPage } from './pages/GenreDetailPage';
 import { GenresPage } from './pages/GenresPage';
 import { EpisodeDetailPage } from './pages/EpisodeDetailPage';
+import { ProfilePage } from './pages/ProfilePage';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { AdminMoviesPage } from './pages/admin/AdminMoviesPage';
 import { AdminActorsPage } from './pages/admin/AdminActorsPage';
@@ -71,6 +72,14 @@ function AppContent() {
         <Route path="/episode/:episodeId" element={<EpisodeDetailPage />} />
 
         {/* Protected Routes */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/wishlist"
           element={

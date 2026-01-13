@@ -32,6 +32,7 @@ export const AdminMoviesPage: React.FC = () => {
   const [selectedDirectorName, setSelectedDirectorName] = useState('');
   const [showDirectorDropdown, setShowDirectorDropdown] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'none'>('none');
 
   useEffect(() => {
     loadMovies();
@@ -219,6 +220,15 @@ export const AdminMoviesPage: React.FC = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded-lg w-64 focus:outline-none focus:border-yellow-500"
           />
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc' | 'none')}
+            className="bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:border-yellow-500"
+          >
+            <option value="none">Sort by</option>
+            <option value="asc">Name A-Z</option>
+            <option value="desc">Name Z-A</option>
+          </select>
           {!showForm && (
             <Button
               variant="primary"
@@ -459,6 +469,11 @@ export const AdminMoviesPage: React.FC = () => {
           <tbody>
             {movies
               .filter((movie) => movie.name.toLowerCase().includes(searchTerm.toLowerCase()))
+              .sort((a, b) => {
+                if (sortOrder === 'asc') return a.name.localeCompare(b.name);
+                if (sortOrder === 'desc') return b.name.localeCompare(a.name);
+                return 0;
+              })
               .map((movie) => (
                 <tr key={movie.id} className="border-b border-gray-700 hover:bg-gray-800">
                   <td className="p-4 text-white">{movie.name}</td>
