@@ -45,7 +45,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthenticationResult login(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                        loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -62,8 +63,7 @@ public class AuthServiceImpl implements AuthService {
                 jwtCookie.toString(),
                 userDetails.getUsername(),
                 roles,
-                userDetails.getPhoneNumber()
-        );
+                userDetails.getPhoneNumber());
 
         return new AuthenticationResult(response, jwtCookie);
     }
@@ -75,13 +75,11 @@ public class AuthServiceImpl implements AuthService {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
         }
 
-
         // Create new user's account
         User user = new User(
                 signUpRequest.getUsername(),
                 encoder.encode(signUpRequest.getPassword()),
-                signUpRequest.getPhoneNumber()
-        );
+                signUpRequest.getPhoneNumber());
 
         String strRole = signUpRequest.getRole();
         new Role();
@@ -105,7 +103,6 @@ public class AuthServiceImpl implements AuthService {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-
     @Override
     public UserInfoResponse getCurrentUserDetails(Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -114,9 +111,30 @@ public class AuthServiceImpl implements AuthService {
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
-        return new UserInfoResponse(userDetails.getId(), userDetails.getUsername(), roles, userDetails.getPhoneNumber());
+        return new UserInfoResponse(userDetails.getId(), userDetails.getUsername(), roles,
+                userDetails.getPhoneNumber());
     }
 
+    @Transactional
+    @Override
+    public UserInfoResponse updateProfile(Authentication authentication, String phoneNumber) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        User user = userRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (phoneNumber != null) {
+            user.setPhoneNumber(phoneNumber);
+        }
+
+        userRepository.save(user);
+
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        return new UserInfoResponse(user.getUserId(), user.getUsername(), roles, user.getPhoneNumber());
+    }
 
     @Override
     public ResponseCookie logoutUser() {

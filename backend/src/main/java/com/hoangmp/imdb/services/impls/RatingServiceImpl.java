@@ -19,121 +19,121 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RatingServiceImpl implements RatingService {
 
-    private final RatingRepository ratingRepository;
+        private final RatingRepository ratingRepository;
 
-    private final UserRepository userRepository;
+        private final UserRepository userRepository;
 
-    private final EpisodeRepository episodeRepository;
+        private final EpisodeRepository episodeRepository;
 
-    private final ModelMapper modelMapper;
+        private final ModelMapper modelMapper;
 
-    @Transactional
-    @Override
-    public RatingDTO createRating(Long userId, Long episodeId, RatingRequest ratingRequest) {
-        Rating rating = new Rating();
-        User user = userRepository.findById(userId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User", "id", userId)
-                );
-        Episode episode = episodeRepository.findById(episodeId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Episode", "id", episodeId)
-                );
+        @Transactional
+        @Override
+        public RatingDTO createRating(Long userId, Long episodeId, RatingRequest ratingRequest) {
+                Rating rating = new Rating();
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+                Episode episode = episodeRepository.findById(episodeId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Episode", "id", episodeId));
 
-        Integer score = ratingRequest.getScore();
+                Integer score = ratingRequest.getScore();
 
-        rating.setUser(user);
-        rating.setEpisode(episode);
-        rating.setScore(score);
-        Double averageScore = episode.getAverageScore();
-        Integer count = episode.getRatingCount();
-        averageScore = (averageScore * count + score) / (count + 1);
-        count += 1;
+                rating.setUser(user);
+                rating.setEpisode(episode);
+                rating.setScore(score);
+                Double averageScore = episode.getAverageScore();
+                Integer count = episode.getRatingCount();
+                averageScore = (averageScore * count + score) / (count + 1);
+                count += 1;
 
-        ratingRepository.save(rating);
+                ratingRepository.save(rating);
 
-        episode.setAverageScore(averageScore);
-        episode.setRatingCount(count);
+                episode.setAverageScore(averageScore);
+                episode.setRatingCount(count);
 
-        episodeRepository.save(episode);
+                episodeRepository.save(episode);
 
-        return modelMapper.map(rating, RatingDTO.class);
-    }
-
-    @Transactional
-    @Override
-    public RatingDTO removeRating(Long userId, Long episodeId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User", "id", userId)
-                );
-        Episode episode = episodeRepository.findById(episodeId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Episode", "id", episodeId)
-                );
-
-        Rating rating = ratingRepository.findByUserAndEpisode(user, episode);
-
-        int score = rating.getScore();
-
-        int count = episode.getRatingCount();
-        double averageScore = episode.getAverageScore();
-
-        if (count <= 1) {
-            episode.setRatingCount(0);
-            episode.setAverageScore(0.0);
-        } else {
-            double newAverage =
-                    (averageScore * count - score) / (count - 1);
-
-            episode.setRatingCount(count - 1);
-            episode.setAverageScore(newAverage);
+                return modelMapper.map(rating, RatingDTO.class);
         }
 
-        ratingRepository.delete(rating);
-        episodeRepository.save(episode);
+        @Transactional
+        @Override
+        public RatingDTO removeRating(Long userId, Long episodeId) {
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+                Episode episode = episodeRepository.findById(episodeId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Episode", "id", episodeId));
 
-        return modelMapper.map(rating, RatingDTO.class);
-    }
+                Rating rating = ratingRepository.findByUserAndEpisode(user, episode);
 
-    @Transactional
-    @Override
-    public RatingDTO updateRating(Long userId, Long episodeId, RatingRequest ratingRequest) {
+                int score = rating.getScore();
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User", "id", userId)
-                );
-        Episode episode = episodeRepository.findById(episodeId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Episode", "id", episodeId)
-                );
+                int count = episode.getRatingCount();
+                double averageScore = episode.getAverageScore();
 
-        Rating rating = ratingRepository.findByUserAndEpisode(user, episode);
+                if (count <= 1) {
+                        episode.setRatingCount(0);
+                        episode.setAverageScore(0.0);
+                } else {
+                        double newAverage = (averageScore * count - score) / (count - 1);
 
-        if(rating == null) {
-            throw new ResourceNotFoundException(
-                    "Rating",
-                    "userId & episodeId",
-                    userId + ", " + episodeId
-            );
+                        episode.setRatingCount(count - 1);
+                        episode.setAverageScore(newAverage);
+                }
+
+                ratingRepository.delete(rating);
+                episodeRepository.save(episode);
+
+                return modelMapper.map(rating, RatingDTO.class);
         }
 
-        Integer score = ratingRequest.getScore();
+        @Transactional
+        @Override
+        public RatingDTO updateRating(Long userId, Long episodeId, RatingRequest ratingRequest) {
 
-        Integer oldScore = rating.getScore();
-        rating.setScore(score);
-        Double averageScore = episode.getAverageScore();
-        Integer count = episode.getRatingCount();
-        averageScore = (averageScore * count - oldScore + score) / count;
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+                Episode episode = episodeRepository.findById(episodeId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Episode", "id", episodeId));
 
-        ratingRepository.save(rating);
+                Rating rating = ratingRepository.findByUserAndEpisode(user, episode);
 
-        episode.setAverageScore(averageScore);
-        episode.setRatingCount(count);
+                if (rating == null) {
+                        throw new ResourceNotFoundException(
+                                        "Rating",
+                                        "userId & episodeId",
+                                        userId + ", " + episodeId);
+                }
 
-        episodeRepository.save(episode);
+                Integer score = ratingRequest.getScore();
 
-        return modelMapper.map(rating, RatingDTO.class);
-    }
+                Integer oldScore = rating.getScore();
+                rating.setScore(score);
+                Double averageScore = episode.getAverageScore();
+                Integer count = episode.getRatingCount();
+                averageScore = (averageScore * count - oldScore + score) / count;
+
+                ratingRepository.save(rating);
+
+                episode.setAverageScore(averageScore);
+                episode.setRatingCount(count);
+
+                episodeRepository.save(episode);
+
+                return modelMapper.map(rating, RatingDTO.class);
+        }
+
+        @Override
+        public RatingDTO getUserRatingForEpisode(Long userId, Long episodeId) {
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+                Episode episode = episodeRepository.findById(episodeId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Episode", "id", episodeId));
+
+                Rating rating = ratingRepository.findByUserAndEpisode(user, episode);
+                if (rating == null) {
+                        return null;
+                }
+                return modelMapper.map(rating, RatingDTO.class);
+        }
 }

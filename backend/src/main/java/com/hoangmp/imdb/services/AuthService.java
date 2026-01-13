@@ -16,5 +16,7 @@ public interface AuthService {
 
     UserInfoResponse getCurrentUserDetails(Authentication authentication);
 
+    UserInfoResponse updateProfile(Authentication authentication, String phoneNumber);
+
     ResponseCookie logoutUser();
 }

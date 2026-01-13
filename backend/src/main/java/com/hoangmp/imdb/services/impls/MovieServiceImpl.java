@@ -32,7 +32,6 @@ public class MovieServiceImpl implements MovieService {
         Movie newMovie = new Movie();
         modelMapper.map(movieRequest, newMovie);
 
-        // Set director if provided
         if (movieRequest.getDirectorId() != null) {
             directorRepository.findById(movieRequest.getDirectorId())
                     .ifPresent(newMovie::setDirector);
@@ -101,12 +100,21 @@ public class MovieServiceImpl implements MovieService {
         }
         // Update director if provided
         if (movieRequest.getDirectorId() != null) {
+            System.out.println("DEBUG: Setting director with ID: " + movieRequest.getDirectorId());
             directorRepository.findById(movieRequest.getDirectorId())
-                    .ifPresent(movie::setDirector);
+                    .ifPresentOrElse(
+                            director -> {
+                                movie.setDirector(director);
+                                System.out.println("DEBUG: Director found and set: " + director.getName());
+                            },
+                            () -> System.out
+                                    .println("DEBUG: Director not found with ID: " + movieRequest.getDirectorId()));
         }
 
-        movieRepository.save(movie);
-        return modelMapper.map(movie, MovieDTO.class);
+        Movie savedMovie = movieRepository.save(movie);
+        System.out.println("DEBUG: Movie saved, director_id in DB: "
+                + (savedMovie.getDirector() != null ? savedMovie.getDirector().getId() : "null"));
+        return modelMapper.map(savedMovie, MovieDTO.class);
     }
 
 }

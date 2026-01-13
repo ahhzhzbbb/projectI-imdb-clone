@@ -1,8 +1,8 @@
 package com.hoangmp.imdb.controllers;
 
-
 import com.hoangmp.imdb.security.request.LoginRequest;
 import com.hoangmp.imdb.security.request.SignupRequest;
+import com.hoangmp.imdb.security.request.UpdateProfileRequest;
 import com.hoangmp.imdb.security.response.AuthenticationResult;
 import com.hoangmp.imdb.security.response.MessageResponse;
 import com.hoangmp.imdb.services.AuthService;
@@ -28,7 +28,7 @@ public class AuthController {
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         AuthenticationResult result = authService.login(loginRequest);
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,
-                        result.getJwtCookie().toString())
+                result.getJwtCookie().toString())
                 .body(result.getResponse());
     }
 
@@ -40,7 +40,7 @@ public class AuthController {
 
     /* API dùng để lấy tên người dùng hiện tại */
     @GetMapping("/username")
-    public String currentUserName(Authentication authentication){
+    public String currentUserName(Authentication authentication) {
         if (authentication != null)
             return authentication.getName();
         else
@@ -49,13 +49,21 @@ public class AuthController {
 
     /* API dùng để lấy thông tin chi tiết người dùng hiện tại */
     @GetMapping("/user")
-    public ResponseEntity<?> getUserDetails(Authentication authentication){
+    public ResponseEntity<?> getUserDetails(Authentication authentication) {
         return ResponseEntity.ok().body(authService.getCurrentUserDetails(authentication));
+    }
+
+    /* API dùng để cập nhật thông tin người dùng */
+    @PutMapping("/user")
+    public ResponseEntity<?> updateProfile(
+            Authentication authentication,
+            @RequestBody UpdateProfileRequest request) {
+        return ResponseEntity.ok().body(authService.updateProfile(authentication, request.getPhoneNumber()));
     }
 
     /* API dùng để đăng xuất người dùng */
     @PostMapping("/signout")
-    public ResponseEntity<?> signoutUser(){
+    public ResponseEntity<?> signoutUser() {
         ResponseCookie cookie = authService.logoutUser();
         return ResponseEntity
                 .ok()

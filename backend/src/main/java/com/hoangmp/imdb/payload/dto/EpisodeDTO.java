@@ -14,5 +14,5 @@ public class EpisodeDTO {
     private String posterURL;
     private String trailerURL;
     private Double averageScore;
-    private Integer reviewCount;
+    private Integer ratingCount;
 }

@@ -9,4 +9,6 @@ public interface RatingService {
     RatingDTO removeRating(Long userId, Long episodeId);
 
     RatingDTO updateRating(Long userId, Long episodeId, RatingRequest ratingRequest);
+
+    RatingDTO getUserRatingForEpisode(Long userId, Long episodeId);
 }

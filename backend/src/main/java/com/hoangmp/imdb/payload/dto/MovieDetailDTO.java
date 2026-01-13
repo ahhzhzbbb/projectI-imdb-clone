@@ -18,4 +18,5 @@ public class MovieDetailDTO {
     private Double averageScore;
     private Integer ratingCount;
     private List<SeasonDetailDTO> seasons;
+    private DirectorDTO director;
 }

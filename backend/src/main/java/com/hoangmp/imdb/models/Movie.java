@@ -18,63 +18,45 @@ import java.util.Set;
 @AllArgsConstructor
 public class Movie {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
-    @Column(nullable = false, length = 150)
-    private String name;
+        @Column(nullable = false, length = 150)
+        private String name;
 
-    @Lob
-    private String description;
+        @Lob
+        private String description;
 
-    @Column(length = 500)
-    private String imageUrl;
+        @Column(length = 500)
+        private String imageUrl;
 
-    @Column(length = 500)
-    private String trailerUrl;
+        @Column(length = 500)
+        private String trailerUrl;
 
-    @Column(nullable = false)
-    private Boolean tvSeries;
+        @Column(nullable = false)
+        private Boolean tvSeries;
 
-    @Column(nullable = false)
-    private Double averageScore = 0.0;
+        @Column(nullable = false)
+        private Double averageScore = 0.0;
 
-    @Column(nullable = false)
-    private Integer reviewCount = 0;
+        @Column(nullable = false)
+        private Integer reviewCount = 0;
 
-    @OneToMany(
-            mappedBy = "movie",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    @OrderBy("number ASC")
-    private List<Season> seasons = new ArrayList<>();
+        @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+        @OrderBy("number ASC")
+        private List<Season> seasons = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "director_id")
-    private Director director;
+        @OneToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "director_id")
+        private Director director;
 
-    @OneToMany(
-            mappedBy = "movie",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private Set<MovieActor> movieActors = new HashSet<>();
+        @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+        private Set<MovieActor> movieActors = new HashSet<>();
 
-    @OneToMany(
-            mappedBy = "movie",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
-    )
-    private Set<MovieGenre> movieGenres = new HashSet<>();
+        @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+        private Set<MovieGenre> movieGenres = new HashSet<>();
 
-    @OneToMany(
-            mappedBy = "movie",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
-    )
-    private Set<Review> reviews = new HashSet<>();
+        @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+        private Set<Review> reviews = new HashSet<>();
 }

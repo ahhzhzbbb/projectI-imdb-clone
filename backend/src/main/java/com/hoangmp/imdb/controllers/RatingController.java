@@ -25,11 +25,25 @@ public class RatingController {
     public ResponseEntity<RatingDTO> rateMovie(
             Authentication authentication,
             @PathVariable Long episodeId,
-            @RequestBody RatingRequest request
-    ) {
+            @RequestBody RatingRequest request) {
         UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
         Long userId = user.getId();
         RatingDTO response = ratingService.createRating(userId, episodeId, request);
+        return ResponseEntity.ok().body(response);
+    }
+
+    /* API lấy đánh giá của user cho một tập phim */
+    @PermitAll
+    @GetMapping("/episode/{episodeId}/rating")
+    public ResponseEntity<RatingDTO> getUserRating(
+            Authentication authentication,
+            @PathVariable Long episodeId) {
+        UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
+        Long userId = user.getId();
+        RatingDTO response = ratingService.getUserRatingForEpisode(userId, episodeId);
+        if (response == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok().body(response);
     }
 
@@ -38,8 +52,7 @@ public class RatingController {
     @DeleteMapping("/episode/{episodeId}/rating")
     public ResponseEntity<RatingDTO> removeRating(
             Authentication authentication,
-            @PathVariable Long episodeId
-    ) {
+            @PathVariable Long episodeId) {
         UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
         Long userId = user.getId();
         RatingDTO response = ratingService.removeRating(userId, episodeId);
@@ -52,8 +65,7 @@ public class RatingController {
     public ResponseEntity<RatingDTO> updateRating(
             @PathVariable Long episodeId,
             Authentication authentication,
-            @RequestBody RatingRequest request
-    ) {
+            @RequestBody RatingRequest request) {
         UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
         Long userId = user.getId();
         RatingDTO response = ratingService.updateRating(userId, episodeId, request);
