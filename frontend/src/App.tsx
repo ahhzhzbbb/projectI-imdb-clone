@@ -13,7 +13,7 @@ import { GenresPage } from './pages/GenresPage';
 import { EpisodeDetailPage } from './pages/EpisodeDetailPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
-import { AdminMoviesPage } from './pages/admin/AdminMoviesPage';
+import { AdminMoviesPage } from './pages/admin/movies/AdminMoviesPage';
 import { AdminActorsPage } from './pages/admin/AdminActorsPage';
 import { AdminDirectorsPage } from './pages/admin/AdminDirectorsPage';
 import { AdminGenresPage } from './pages/admin/AdminGenresPage';
