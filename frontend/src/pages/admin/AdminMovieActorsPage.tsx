@@ -18,6 +18,7 @@ export const AdminMovieActorsPage: React.FC = () => {
     const [movieActorIds, setMovieActorIds] = useState<(number | string)[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [movieQuery, setMovieQuery] = useState('');
+    const [actorQuery, setActorQuery] = useState('');
 
     const location = useLocation();
     const movieIdParam = useMemo(() => new URLSearchParams(location.search).get('movieId'), [location.search]);
@@ -94,6 +95,11 @@ export const AdminMovieActorsPage: React.FC = () => {
         return q ? movies.filter((m) => m.name.toLowerCase().includes(q)) : movies;
     }, [movies, movieQuery]);
 
+    const filteredActors = useMemo(() => {
+        const q = actorQuery.trim().toLowerCase();
+        return q ? allActors.filter((a) => a.name.toLowerCase().includes(q)) : allActors;
+    }, [allActors, actorQuery]);
+
     if (isLoading) {
         return (
             <MainLayout>
@@ -133,9 +139,18 @@ export const AdminMovieActorsPage: React.FC = () => {
 
                 {/* All actors with Add/Remove toggle */}
                 <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
-                    <h2 className="text-xl font-bold text-white mb-4">All Actors</h2>
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-xl font-bold text-white">All Actors</h2>
+                        <input
+                            type="text"
+                            placeholder="Search actors..."
+                            value={actorQuery}
+                            onChange={(e) => setActorQuery(e.target.value)}
+                            className="bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded-lg w-64 focus:outline-none focus:border-yellow-500"
+                        />
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {allActors.map((actor) => {
+                        {filteredActors.map((actor) => {
                             const isAttached = movieActorIds.includes(actor.id);
                             return (
                                 <div
@@ -177,6 +192,11 @@ export const AdminMovieActorsPage: React.FC = () => {
                                 </div>
                             );
                         })}
+                        {filteredActors.length === 0 && (
+                            <div className="col-span-full text-center text-gray-500 py-8">
+                                No actors found matching "{actorQuery}"
+                            </div>
+                        )}
                     </div>
                 </div>
             </MainLayout>
