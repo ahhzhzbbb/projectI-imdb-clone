@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   backend:
     build: ./backend
@@ -5,20 +7,26 @@ services:
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/imdb?useSSL=false
-      SPRING_DATASOURCE_USERNAME: hoang
-      SPRING_DATASOURCE_PASSWORD: aqws12345zx
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
 
   mariadb:
     image: mariadb:12.1.2-ubi10
     environment:
-      MARIADB_ROOT_PASSWORD: aqws12345zx
-      MARIADB_DATABASE: imdb
-      MARIADB_USER: hoang
-      MARIADB_PASSWORD: aqws12345zx
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   frontend:
     build: ./frontend
     ports:
-      - "80"
+      - "5173:80"
