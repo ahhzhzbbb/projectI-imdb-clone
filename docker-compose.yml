@@ -19,6 +19,5 @@ services:
       MARIADB_PASSWORD: aqws12345zx
 
   frontend:
-    build:
     ports:
       - "80"
