@@ -17,3 +17,8 @@ services:
       MARIADB_DATABASE: imdb
       MARIADB_USER: hoang
       MARIADB_PASSWORD: aqws12345zx
+
+  frontend:
+    build:
+    ports:
+      - "80"
