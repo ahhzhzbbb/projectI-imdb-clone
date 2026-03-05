@@ -1,6 +1,6 @@
 services:
   backend:
-    build: .
+    build: ./backend
     ports:
       - "8080:8080"
     environment:
@@ -19,5 +19,6 @@ services:
       MARIADB_PASSWORD: aqws12345zx
 
   frontend:
+    build: ./frontend
     ports:
       - "80"
